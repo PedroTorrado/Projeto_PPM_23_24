@@ -2,16 +2,28 @@ import RandomChar.randomChar
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val seed = System.currentTimeMillis() // Use o tempo atual como semente para garantir aleatoriedade
+    val seed = 1050 // Use o tempo atual como semente para garantir aleatoriedade
     val rand = new RandomChar.MyRandom(seed) // Criar uma instância de Random
-    val (randomLetter, newRand) = randomChar(rand) // Gerar uma letra aleatória e atualizar o estado do gerador de números aleatórios
-    val (randomLetter1, newRand1) = randomChar(newRand) // Gerar uma letra aleatória e atualizar o estado do gerador de números aleatórios
-    val (randomLetter2, newRand2) = randomChar(newRand1) // Gerar uma letra aleatória e atualizar o estado do gerador de números aleatórios
 
-    val board = Board(3, 3) // Criar um tabuleiro 3x3
-    board.fillOneCell(randomLetter, Coord2D(0, 0)) // Preencher a célula (0, 0) com uma letra aleatória
-    board.fillOneCell(randomLetter1, Coord2D(0, 1)) // Preencher a célula (0, 0) com uma letra aleatória
-    board.fillOneCell(randomLetter2, Coord2D(0, 2)) // Preencher a célula (0, 0) com uma letra aleatória
-    board.display() // Exibir o tabuleiro preenchido
+    val board = Board(10,10) // Criar um tabuleiro vazio
+
+    val words = List("STACK", "OVERFLOW", "IS", "AWESOME")
+    val positions = List(
+      List(Coord2D(0, 0), Coord2D(1, 0), Coord2D(2, 0), Coord2D(3, 0), Coord2D(4, 0)), // For "STACK"
+      List(Coord2D(0, 1), Coord2D(1, 1), Coord2D(2, 1), Coord2D(3, 1), Coord2D(4, 1), Coord2D(5, 1), Coord2D(6, 1), Coord2D(7, 1)), // For "OVERFLOW"
+      List(Coord2D(0, 2), Coord2D(1, 2)), // For "IS"
+      List(Coord2D(0, 3), Coord2D(1, 3), Coord2D(2, 3), Coord2D(3, 3), Coord2D(4, 3), Coord2D(5, 3), Coord2D(6,3)) // For "AWESOME"
+    )
+
+    board.setBoardWithWords(board, words, positions)
+
+    board.display()
+
+    println("")
+
+    board.fillEntireBoard(board, seed, rand, 0, 0) // Preencher o tabuleiro inteiro
+    board.display()
+
+
   }
 }
