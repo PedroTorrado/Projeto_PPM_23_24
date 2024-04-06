@@ -1,5 +1,6 @@
 import RandomChar.{MyRandom, randomChar}
 
+import scala.annotation.tailrec
 import scala.util.Random
 
 case class Coord2D(x: Int, y: Int)
@@ -24,18 +25,27 @@ case class Board(rows: Int, columns: Int) {
   }
 
   // Método recursivo para preencher todo o tabuleiro a partir da posição (x, y)
-  def fillEntireBoard(board: Board, seed: Long, rand: MyRandom, x: Int, y: Int): Unit = {
-    if (y < board.columns) { // Check if we are still within the columns of the board
-      if (x < board.rows) { // Check if we are still within the rows of the board
-        if (board.getCell(x, y) == ' ') { // Check if the cell at (x, y) is empty
-          val (randomLetter, newRand) = randomChar(rand) // Generate a random letter and update the random generator state
-          board.fillOneCell(randomLetter, Coord2D(x, y)) // Fill the current cell with a random letter
+  def completeBoardRandomly(board: Board, r: MyRandom, f: MyRandom => (Char, MyRandom)): Board = {
+    @tailrec
+    def fillEntireBoard(newBoard: Board, rand: MyRandom, x: Int, y: Int): Board = {
+      if (y < newBoard.rows) {
+        if (x < newBoard.columns) {
+          if (newBoard.getCell(x, y) == ' ') {
+            val (randomLetter, newRand) = f(rand)
+            val updatedBoard = newBoard.fillOneCell(randomLetter, Coord2D(x, y))
+            fillEntireBoard(updatedBoard, newRand, x + 1, y)
+          } else {
+            fillEntireBoard(newBoard, rand, x + 1, y)
+          }
+        } else {
+          fillEntireBoard(newBoard, rand, 0, y + 1)
         }
-        fillEntireBoard(board, seed, rand, x + 1, y) // Recursively call to fill the next cell in the same row
-      } else { // If we reach the end of the row, move to the next row and start from the first column
-        fillEntireBoard(board, seed, rand, 0, y + 1) // Recursively call to fill the first cell of the next row
+      } else {
+        newBoard
       }
     }
+
+    fillEntireBoard(board, r, 0, 0)
   }
 
 

@@ -3,7 +3,7 @@ import RandomChar.randomChar
 object Main {
   def main(args: Array[String]): Unit = {
     val seed = 1050 // Use o tempo atual como semente para garantir aleatoriedade
-    val rand = new RandomChar.MyRandom(seed) // Criar uma instância de Random
+    val rand = RandomChar.MyRandom(seed) // Criar uma instância de Random
 
     val board = Board(10,10) // Criar um tabuleiro vazio
 
@@ -21,7 +21,7 @@ object Main {
 
     println("")
 
-    board.fillEntireBoard(board, seed, rand, 0, 0) // Preencher o tabuleiro inteiro
+    board.completeBoardRandomly(board, rand, randomChar) // Preencher o tabuleiro com letras aleatórias
     board.display()
 
 
