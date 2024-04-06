@@ -1,9 +1,6 @@
 import scala.util.Random
 
-object Tabuleiro {
-
-  import scala.util.Random
-
+object RandomChar {
   case class MyRandom(seed: Long) {
     def nextInt: (Int, MyRandom) = {
       val random = new Random(seed)
