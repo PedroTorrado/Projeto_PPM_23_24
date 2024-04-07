@@ -113,22 +113,31 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     checkWord(startCoord, word)
   }
 
-
   def playUntraditional(word: String, startCoord: Coord2D, initialDirection: Direction.Value): Boolean = {
-
     if (word.isEmpty) {
       true // Empty word, so it's found
     } else {
       val nextCoord = computeNextCoord(startCoord, initialDirection)
       val remainingWord = word.tail
-      val directions = Direction.values.filterNot(_ == initialDirection) // Exclude initial direction
 
-      println(remainingWord)
+      // Check if the next coordinate is valid
+      val isValidNextCoord = isValidCoord(nextCoord)
 
-      // Recursively check each direction for the remaining letters
-      directions.exists(direction => playUntraditional(remainingWord, nextCoord, direction))
+      if (isValidNextCoord && word.head == getCell(startCoord._1, startCoord._2)) {
+        val directions = Direction.values.filterNot(_ == initialDirection) // Exclude initial direction
+        val foundInOtherDirections = directions.exists(direction => playUntraditional(remainingWord, nextCoord, direction))
+
+        if (foundInOtherDirections) {
+          true // Word found in at least one direction
+        } else {
+          false // Word not found in any direction
+        }
+      } else {
+        false // First letter doesn't match the letter at startCoord or nextCoord is invalid
+      }
     }
   }
+
 
   def display(): Unit = {
     grid.foreach(row => println(row.mkString(" "))) // Print each row separated by spaces
