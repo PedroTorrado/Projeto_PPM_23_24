@@ -1,29 +1,26 @@
-import RandomChar.randomChar
-
+import RandomChar.MyRandom
 object Main {
   def main(args: Array[String]): Unit = {
-    val seed = 1050 // Use o tempo atual como semente para garantir aleatoriedade
-    val rand = RandomChar.MyRandom(seed) // Criar uma instância de Random
+    val seed = System.currentTimeMillis() // Use current time as seed for randomness
+    val rand = RandomChar.MyRandom(seed) // Create a MyRandom object with the seed
 
-    val board = Board(10,10) // Criar um tabuleiro vazio
+    val board = BoardData.empty(10, 10)
 
     val words = List("STACK", "OVERFLOW", "IS", "AWESOME")
     val positions = List(
-      List(Coord2D(0, 0), Coord2D(1, 0), Coord2D(2, 0), Coord2D(3, 0), Coord2D(4, 0)), // For "STACK"
-      List(Coord2D(0, 1), Coord2D(1, 1), Coord2D(2, 1), Coord2D(3, 1), Coord2D(4, 1), Coord2D(5, 1), Coord2D(6, 1), Coord2D(7, 1)), // For "OVERFLOW"
-      List(Coord2D(0, 2), Coord2D(1, 2)), // For "IS"
-      List(Coord2D(0, 3), Coord2D(1, 3), Coord2D(2, 3), Coord2D(3, 3), Coord2D(4, 3), Coord2D(5, 3), Coord2D(6,3)) // For "AWESOME"
+      List((0, 0), (1, 0), (2, 0), (3, 0), (4, 0)), // For "STACK"
+      List((0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1)), // For "OVERFLOW"
+      List((0, 2), (1, 2)), // For "IS"
+      List((0, 3), (1, 3), (2, 3), (3, 3), (4, 3), (5, 3), (6, 3)) // For "AWESOME"
     )
 
-    board.setBoardWithWords(board, words, positions)
+    val filledBoard = board.setBoardWithWords(words, positions)
 
-    board.display()
+    filledBoard.display()
 
-    println("")
+    println()
 
-    board.completeBoardRandomly(board, rand, randomChar) // Preencher o tabuleiro com letras aleatórias
-    board.display()
-
-
+    val randomFilledBoard = filledBoard.completeBoardRandomly(rand, RandomChar.randomChar)
+    randomFilledBoard.display()
   }
 }

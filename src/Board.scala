@@ -1,38 +1,46 @@
-import RandomChar.{MyRandom, randomChar}
-
 import scala.annotation.tailrec
 import scala.util.Random
+import scala.collection.mutable.ListBuffer
+import RandomChar.{MyRandom, randomChar}
 
-case class Coord2D(x: Int, y: Int)
+object Direction extends Enumeration {
+  type Direction = Value
+  val North, South, East, West, NorthEast, NorthWest, SouthEast, SouthWest = Value
+}
 
-case class Board(rows: Int, columns: Int) {
-  val grid: Array[Array[Char]] = Array.fill(rows, columns)(' ')
+case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
+  type Board = List[List[Char]]
+  type Coord2D = (Int, Int)
 
-  def fillOneCell(letter: Char, coord: Coord2D): Board = {
+  // Method to fill one cell on the board
+  def fillOneCell(letter: Char, coord: Coord2D): BoardData = {
     if (isValidCoord(coord)) {
-      grid(coord.x)(coord.y) = letter
+      val (x, y) = coord
+      val updatedGrid = grid.updated(x, grid(x).updated(y, letter))
+      BoardData(rows, columns, updatedGrid) // Corrected this line
+    } else {
+      this
     }
-    this // Retorna o próprio objeto Board modificado
   }
 
+  // Method to check if a coordinate is valid
   private def isValidCoord(coord: Coord2D): Boolean = {
-    coord.x >= 0 && coord.x < rows && coord.y >= 0 && coord.y < columns
+    val (x, y) = coord
+    x >= 0 && x < rows && y >= 0 && y < columns
   }
 
-  def getCell(x: Int ,y : Int): Char = {
-    val char = grid(x)(y)
-    char
+  def getCell(x: Int, y: Int): Char = {
+    grid(x)(y)
   }
 
-  // Método recursivo para preencher todo o tabuleiro a partir da posição (x, y)
-  def completeBoardRandomly(board: Board, r: MyRandom, f: MyRandom => (Char, MyRandom)): Board = {
+  def completeBoardRandomly(rand: MyRandom, f: MyRandom => (Char, MyRandom)): BoardData = {
     @tailrec
-    def fillEntireBoard(newBoard: Board, rand: MyRandom, x: Int, y: Int): Board = {
-      if (y < newBoard.rows) {
-        if (x < newBoard.columns) {
+    def fillEntireBoard(newBoard: BoardData, rand: MyRandom, x: Int, y: Int): BoardData = {
+      if (y < rows) {
+        if (x < columns) {
           if (newBoard.getCell(x, y) == ' ') {
             val (randomLetter, newRand) = f(rand)
-            val updatedBoard = newBoard.fillOneCell(randomLetter, Coord2D(x, y))
+            val updatedBoard = newBoard.fillOneCell(randomLetter, (x, y))
             fillEntireBoard(updatedBoard, newRand, x + 1, y)
           } else {
             fillEntireBoard(newBoard, rand, x + 1, y)
@@ -45,32 +53,41 @@ case class Board(rows: Int, columns: Int) {
       }
     }
 
-    fillEntireBoard(board, r, 0, 0)
+    fillEntireBoard(this, rand, 0, 0)
   }
 
-
-  def setBoardWithWords(board: Board, words: List[String], positions: List[List[Coord2D]]): Board = {
-    // Create a copy of the original board to preserve it
-
-    // Iterate over each word and its corresponding positions
-    for ((word, coords) <- words.zip(positions)) {
-      // Iterate over each character of the word and its corresponding position
-      for ((char, coord) <- word.zip(coords)) {
-        // Check if the coordinates are within the boundaries of the board
-        if (coord.x >= 0 && coord.x < board.rows && coord.y >= 0 && coord.y < board.columns) {
-          // Fill the cell with the character from the word
-          board.fillOneCell(char, coord)
+  def setBoardWithWords(words: List[String], positions: List[List[Coord2D]]): BoardData = {
+    def fillBoard(board: BoardData, word: String, coords: List[Coord2D]): BoardData = {
+      coords.zip(word).foldLeft(board) { case (accBoard, ((x, y), char)) =>
+        if (isValidCoord(x, y)) {
+          accBoard.fillOneCell(char, (x, y))
+        } else {
+          accBoard
         }
       }
     }
 
-    // Return the modified board
-    board
+    val filledBoard = words.zip(positions).foldLeft(this) { case (accBoard, (word, coords)) =>
+      fillBoard(accBoard, word, coords)
+    }
+
+    filledBoard
   }
 
+
+
+
+  def makeMatrix: Board = grid
+
   def display(): Unit = {
-    for (row <- grid) {
-      println(row.mkString("|", "|", "|"))
-    }
+    grid.foreach(row => println(row.mkString("|", " ", "|")))
+  }
+}
+
+object BoardData {
+  // Factory method to create an empty board
+  def empty(rows: Int, columns: Int): BoardData = {
+    val emptyGrid = List.fill(rows)(List.fill(columns)(' '))
+    BoardData(rows, columns, emptyGrid)
   }
 }
