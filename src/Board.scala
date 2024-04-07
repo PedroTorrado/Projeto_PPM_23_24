@@ -73,15 +73,47 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
 
     filledBoard
   }
-
-
-
-
   def makeMatrix: Board = grid
 
-  def display(): Unit = {
-    grid.foreach(row => println(row.mkString("|", " ", "|")))
+  def play(word: String, startCoord: Coord2D, direction: Direction.Value): Boolean = {
+    @tailrec
+    def checkWord(coord: Coord2D, remainingWord: String): Boolean = {
+      if (remainingWord.isEmpty) {
+        true // All characters of the word matched
+      } else if (!isValidCoord(coord)) {
+        false // Coordinate is out of bounds
+      } else {
+        val (x, y) = coord
+        val currentLetter = getCell(x, y)
+        if (currentLetter != remainingWord.head) {
+          false // Current cell doesn't match the next character of the word
+        } else {
+          // Move to the next cell in the specified direction
+          val nextCoord = direction match {
+            case Direction.North => (x - 1, y)
+            case Direction.South => (x + 1, y)
+            case Direction.East => (x, y + 1)
+            case Direction.West => (x, y - 1)
+            case Direction.NorthEast => (x - 1, y + 1)
+            case Direction.NorthWest => (x - 1, y - 1)
+            case Direction.SouthEast => (x + 1, y + 1)
+            case Direction.SouthWest => (x + 1, y - 1)
+          }
+          checkWord(nextCoord, remainingWord.tail) // Recur with the next cell and remaining word
+        }
+      }
+    }
+
+    val (x, y) = startCoord
+    checkWord(startCoord, word)
   }
+
+
+
+  def display(): Unit = {
+    grid.foreach(row => println(row.mkString(" "))) // Print each row separated by spaces
+  }
+
 }
 
 object BoardData {

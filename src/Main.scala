@@ -1,7 +1,7 @@
 import RandomChar.MyRandom
 object Main {
   def main(args: Array[String]): Unit = {
-    val seed = System.currentTimeMillis() // Use current time as seed for randomness
+    val seed = 0 // Use current time as seed for randomness
     val rand = RandomChar.MyRandom(seed) // Create a MyRandom object with the seed
 
     val board = BoardData.empty(10, 10)
@@ -22,5 +22,12 @@ object Main {
 
     val randomFilledBoard = filledBoard.completeBoardRandomly(rand, RandomChar.randomChar)
     randomFilledBoard.display()
+
+    var wordExists = randomFilledBoard.play("STACK", (0, 0), Direction.South)
+    println(s"Word 'STACK' exists: $wordExists")
+     wordExists = randomFilledBoard.play("OVERFLOW", (0, 1), Direction.South)
+    println(s"Word 'OVERFLOW' exists: $wordExists")
+     wordExists = randomFilledBoard.play("STACK", (0, 0), Direction.East)
+    println(s"Word 'STACK' exists: $wordExists")
   }
 }
