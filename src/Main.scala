@@ -1,33 +1,28 @@
-import RandomChar.MyRandom
+import RandomChar.{MyRandom, randomChar}
 object Main {
   def main(args: Array[String]): Unit = {
-    val seed = 0 // Use current time as seed for randomness
-    val rand = RandomChar.MyRandom(seed) // Create a MyRandom object with the seed
+    val seed = System.currentTimeMillis() // Use current time as seed for randomness
+    val rand = MyRandom(seed) // Create a MyRandom object with the seed
 
-    val board = BoardData.empty(10, 10)
+    // Create an empty board
+    val board = BoardData.empty(5, 5)
 
-    val words = List("STACK", "OVERFLOW", "IS", "AWESOME")
-    val positions = List(
-      List((0, 0), (1, 0), (2, 0), (3, 0), (4, 0)), // For "STACK"
-      List((0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1)), // For "OVERFLOW"
-      List((0, 2), (1, 2)), // For "IS"
-      List((0, 3), (1, 3), (2, 3), (3, 3), (4, 3), (5, 3), (6, 3)) // For "AWESOME"
-    )
+    // Define the positions and word for the word "PROGRAMAR"
+    val programarPositions = List((3, 3), (2, 3), (1, 2), (1, 1), (2,1), (3, 0), (3, 1), (4, 2), (4,3))
 
-    val filledBoard = board.setBoardWithWords(words, positions)
+    // Fill the word "PROGRAMAR" on the board
+    val boardWithProgramar = board.setBoardWithWords(List("PROGRAMAR"), List(programarPositions))
 
-    filledBoard.display()
+    val randomFilledBoard = boardWithProgramar.completeBoardRandomly(rand, RandomChar.randomChar)
 
-    println()
-
-    val randomFilledBoard = filledBoard.completeBoardRandomly(rand, RandomChar.randomChar)
+    // Display the final board
     randomFilledBoard.display()
 
-    var wordExists = randomFilledBoard.play("STACK", (0, 0), Direction.South)
-    println(s"Word 'STACK' exists: $wordExists")
-     wordExists = randomFilledBoard.play("OVERFLOW", (0, 1), Direction.South)
-    println(s"Word 'OVERFLOW' exists: $wordExists")
-     wordExists = randomFilledBoard.play("STACK", (0, 0), Direction.East)
-    println(s"Word 'STACK' exists: $wordExists")
+    val wordval = randomFilledBoard.playTradicional("PROGRAMAR", (3,3), Direction.North)
+    println(wordval)
+
+    val wordvalInconvencional = randomFilledBoard.playUntraditional("PROGRAMAR", (3,3), Direction.North)
+    println(wordvalInconvencional)
   }
+
 }
