@@ -33,7 +33,7 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     grid(x)(y)
   }
 
-  def completeBoardRandomly(rand: MyRandom, f: MyRandom => (Char, MyRandom)): BoardData = {
+  def completeBoardRandomly(rand: MyRandom, f: MyRandom => (Char, MyRandom)): (BoardData, MyRandom) = {
     @tailrec
     def fillEntireBoard(newBoard: BoardData, rand: MyRandom, x: Int, y: Int): BoardData = {
       if (y < rows) {
@@ -52,8 +52,7 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
         newBoard
       }
     }
-
-    fillEntireBoard(this, rand, 0, 0)
+    (fillEntireBoard(this, rand, 0, 0), rand)
   }
 
   def setBoardWithWords(words: List[String], positions: List[List[Coord2D]]): BoardData = {

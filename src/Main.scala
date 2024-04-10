@@ -22,7 +22,7 @@ object Main {
         case "2" =>
           randomFilledBoard match {
             case Some(board) =>
-                play(board)
+              play(board)
             case None => println(s"$currentTextColor Please start a new board first.$currentTextColor")
           }
         case "4" =>
@@ -58,7 +58,7 @@ object Main {
     val MLPositions = List((0, 0), (0, 1))
     val boardWithProgramarML = boardWithProgramar.setBoardWithWords(List("ML"), List(MLPositions))
 
-    boardWithProgramarML.completeBoardRandomly(rand, RandomChar.randomChar)
+    boardWithProgramarML.completeBoardRandomly(rand, RandomChar.randomChar)._1
   }
 
   private def play(board: BoardData): Unit = {
