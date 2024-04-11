@@ -1,14 +1,12 @@
 import RandomChar.MyRandom
 
 object Main {
-  private var currentTextColor: String = "\u001b[0m" // Default text color (reset)
-
   def main(args: Array[String]): Unit = {
     jogoPalavrasCruzadas()
   }
 
   private def jogoPalavrasCruzadas(): Unit = {
-    println(s"$currentTextColor Welcome to Crossword Puzzle Game!\n$currentTextColor")
+    println(s"Welcome to Crossword Puzzle Game!\n")
 
     var randomFilledBoard: Option[BoardData] = None
 
@@ -17,28 +15,28 @@ object Main {
       .foreach {
         case "1" =>
           randomFilledBoard = Some(createNewTestBoard())
-          println(s"$currentTextColor New board created:$currentTextColor")
+          println(s"New board created:")
           randomFilledBoard.foreach(_.display())
         case "2" =>
           randomFilledBoard match {
             case Some(board) =>
               play(board)
-            case None => println(s"$currentTextColor Please start a new board first.$currentTextColor")
+            case None => println(s"Please start a new board first.")
           }
         case "4" =>
           changeTextColor()
         case _ =>
-          println(s"$currentTextColor Invalid option. Please select a valid option.$currentTextColor")
+          println(s"Invalid option. Please select a valid option.")
       }
   }
 
   private def promptOption(): String = {
-    println(s"$currentTextColor Options:$currentTextColor")
-    println(s"$currentTextColor 1. Create new board$currentTextColor")
-    println(s"$currentTextColor 2. Play$currentTextColor")
-    println(s"$currentTextColor 3. Exit$currentTextColor")
-    println(s"$currentTextColor 4. Change Text Color$currentTextColor")
-    print(s"$currentTextColor Select an option: $currentTextColor")
+    println(s"Options:")
+    println(s"1.Create new board")
+    println(s"2.Play")
+    println(s"3.Exit")
+    println(s"4.Change Text Color")
+    print(s"Select an option: ")
     scala.io.StdIn.readLine()
   }
 
@@ -62,22 +60,22 @@ object Main {
   }
 
   private def play(board: BoardData): Unit = {
-    println(s"$currentTextColor Current Board:$currentTextColor")
+    println(s" Current Board:")
     board.display()
 
     // Ask the user for the word, starting coordinate, and direction
-    println(s"$currentTextColor \nEnter the word you want to find:$currentTextColor")
+    println(s"\nEnter the word you want to find:")
     val word = scala.io.StdIn.readLine().toUpperCase()
 
-    println(s"$currentTextColor \nEnter the starting coordinate (row column), e.g., '3 3':$currentTextColor")
+    println(s"\nEnter the starting coordinate (row column), e.g., '3 3':")
     val startCoord = getCoordinate(board)
 
-    println(s"$currentTextColor \nEnter the direction (North, South, East, West, NorthEast, NorthWest, SouthEast, SouthWest):$currentTextColor")
+    println(s"\nEnter the direction (North, South, East, West, NorthEast, NorthWest, SouthEast, SouthWest):")
     val direction = getDirection()
 
     // Check if the word is found
     val wordFound = board.playUntraditional(word, startCoord, direction)
-    println(s"$currentTextColor\nThe word '$word' was found: $wordFound$currentTextColor")
+    println(s"\nThe word '$word' was found: $wordFound")
   }
 
   private def getCoordinate(board: BoardData): (Int, Int) = {
@@ -96,11 +94,11 @@ object Main {
           startCoord = (row, column)
           validCoord = true
         } else {
-          println(s"$currentTextColor Invalid coordinates. Please enter again:$currentTextColor")
+          println(s"Invalid coordinates. Please enter again:")
         }
       } catch {
         case _: NumberFormatException =>
-          println(s"$currentTextColor Invalid input. Please enter again:$currentTextColor")
+          println(s"Invalid input. Please enter again:")
       }
     }
     startCoord
@@ -112,26 +110,26 @@ object Main {
   }
 
   private def changeTextColor(): Unit = {
-    println(s"$currentTextColor Select a color:$currentTextColor")
-    println(s"$currentTextColor 0. White$currentTextColor")
-    println(s"$currentTextColor 1. Red$currentTextColor")
-    println(s"$currentTextColor 2. Green$currentTextColor")
-    println(s"$currentTextColor 3. Yellow$currentTextColor")
-    println(s"$currentTextColor 4. Blue$currentTextColor")
+    println(s"Select a color:")
+    println(s"0.White")
+    println(s"1.Red")
+    println(s"2.Green")
+    println(s"3.Yellow")
+    println(s"4.Blue")
 
     scala.io.StdIn.readLine() match {
       case "0" =>
-        currentTextColor = "\u001b[0m" // White
+        print(Console.WHITE)
       case "1" =>
-        currentTextColor = "\u001b[31m" // Red
+        print(Console.RED)
       case "2" =>
-        currentTextColor = "\u001b[32m" // Green
+        print(Console.GREEN)
       case "3" =>
-        currentTextColor = "\u001b[33m" // Yellow
+        print(Console.YELLOW)
       case "4" =>
-        currentTextColor = "\u001b[34m" // Blue
+        print(Console.BLUE)
       case _ =>
-        println(s"$currentTextColor Invalid color option.$currentTextColor")
+        println(s"Invalid color option.")
     }
   }
 }
