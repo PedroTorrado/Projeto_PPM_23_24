@@ -139,7 +139,7 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
 
 
   def display(): Unit = {
-    grid.foreach(row => println(row.mkString(" "))) // Print each row separated by spaces
+    println(grid.map(_.mkString(" ")).mkString("\n")) // Print each row separated by spaces
   }
 
 }
