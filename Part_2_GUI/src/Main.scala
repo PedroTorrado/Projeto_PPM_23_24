@@ -14,6 +14,7 @@ class Main extends Application {
     primaryStage.show()
   }
 }
+
 object FxApp {
   def main(args: Array[String]): Unit = {
     Application.launch(classOf[Main], args: _*)

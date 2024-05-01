@@ -24,7 +24,7 @@ object RandomChar {
         // Extract the first 10 characters from the first line (change 10 to your desired number)
         val numCharsToRead = 3
         val currentSeed = firstLine.take(numCharsToRead).toLong
-        println(currentSeed)
+        //println(currentSeed)
 
         // Generate the next random number using the seed
         val random = new scala.util.Random(currentSeed)
