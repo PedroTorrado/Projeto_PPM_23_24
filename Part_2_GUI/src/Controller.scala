@@ -1,7 +1,7 @@
 import RandomChar.MyRandom
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.{Parent, Scene}
-import javafx.scene.control.Label
+import javafx.scene.control.{Button, Label}
 import javafx.scene.layout.GridPane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
@@ -126,7 +126,10 @@ class Controller {
     }
   }
 
+  @FXML private var startButton: Button = _
+
   def startButtonPressed(): Unit = {
+    //println("start button clicked")
     val game = createNewTestBoard()
   }
 
