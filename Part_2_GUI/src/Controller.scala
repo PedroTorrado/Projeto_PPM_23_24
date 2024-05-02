@@ -60,7 +60,9 @@ class Controller {
   final val red1 = "#F4C1C1"
   final val white1 = "#FFFFFF"
 
-  var letterSelected = letter00
+  var selectedCoords = (0, 0)
+  var selectedWord = ""
+  var filledBoard = new BoardData(0, 0, null)
 
   @FXML
   def initialize(): Unit = {
@@ -143,7 +145,7 @@ class Controller {
 
 
   def getColorValue(label: Label): String = {
-    val styleString = label.getStyle()
+    val styleString = label.getStyle
 
     if (styleString != null && styleString.startsWith("-fx-background-color: ")) {
       val colorStartIndex = styleString.indexOf(": ") + 2 // Skip "-fx-background-color: "
@@ -177,7 +179,7 @@ class Controller {
     val rand = MyRandom() // Create an instance of MyRandom with the file
 
     // Call completeBoardRandomly with the MyRandom instance
-    val (filledBoard, _) = boardWithProgramar.completeBoardRandomly(rand, MyRandom.randomChar)
+    filledBoard = boardWithProgramar.completeBoardRandomly(rand, MyRandom.randomChar)._1
 
     filledBoard
 
@@ -199,7 +201,7 @@ class Controller {
           resetColor(labelMatrix(x)(y))
           changeGUI(x, y+1)
         }
-        }
+      }
     }
     changeGUI(0, 0)
     filledBoard
@@ -208,6 +210,7 @@ class Controller {
   def checkWordClicked(): Unit = {
     checkWordButton.setVisible(false)
     confirmCoordsButton.setVisible(true)
+    selectedWord = wordTextField.getText
     val items = FXCollections.observableArrayList(0, 1, 2, 3, 4)
     columnLabel.setVisible(true)
     columnChoice.setItems(items)
@@ -220,6 +223,14 @@ class Controller {
   def confirmCoords(): Unit = {
     if(columnChoice.getValue != null && rowChoice.getValue != null) {
       errorCoords.setVisible(false)
+      val labelMatrix  = {
+        Array(Array(letter00, letter01, letter02, letter03, letter04),
+          Array(letter10, letter11, letter12, letter13, letter14),
+          Array(letter20, letter21, letter22, letter23, letter24),
+          Array(letter30, letter31, letter32, letter33, letter34),
+          Array(letter40, letter41, letter42, letter43, letter44))
+      }
+      selectedCoords = ((rowChoice.getValue), (columnChoice.getValue))
       northButton.setVisible(true)
       westButton.setVisible(true)
       eastButton.setVisible(true)
@@ -230,6 +241,8 @@ class Controller {
   }
 
   def northClicked(): Unit = {
+    filledBoard.play(selectedWord, selectedCoords, Direction.North)
+
   }
 
 }
