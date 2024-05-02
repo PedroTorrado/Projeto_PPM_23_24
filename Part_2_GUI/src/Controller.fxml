@@ -6,7 +6,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
     <children>
-        <GridPane alignment="CENTER" gridLinesVisible="true" layoutX="324.0" layoutY="83.0">
+        <GridPane fx:id="gridPane" alignment="CENTER" gridLinesVisible="true" layoutX="324.0" layoutY="83.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="50.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="50.0" />
@@ -48,10 +48,11 @@
             <Label fx:id="letter44" alignment="CENTER" layoutX="212.0" layoutY="10.0" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
         </GridPane>
         <TextField layoutX="339.0" layoutY="391.0">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </TextField>
-      <Button fx:id="startButton" layoutX="378.0" layoutY="460.0" mnemonicParsing="false" onAction="#startButtonPressed" prefHeight="36.0" prefWidth="144.0" text="Start new Board" textAlignment="CENTER" />
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <Button fx:id="newBoardButton" layoutX="378.0" layoutY="460.0" mnemonicParsing="false" onMouseClicked="#startButtonPressed" prefHeight="36.0" prefWidth="144.0" text="Start new Board" textAlignment="CENTER" />
+      <Button fx:id="checkWordButton" layoutX="574.0" layoutY="398.0" mnemonicParsing="false" text="Check Word" />
     </children>
 </Pane>

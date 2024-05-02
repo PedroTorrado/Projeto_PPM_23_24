@@ -34,25 +34,25 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     grid(x)(y)
   }
 
-    def completeBoardRandomly(rand: MyRandom, f: MyRandom => (Char, MyRandom)): (BoardData, MyRandom) = {
-      @tailrec
-      def fillEntireBoard(newBoard: BoardData, rand: MyRandom, x: Int, y: Int): BoardData = {
-        if (y < rows) {
-          if (x < columns) {
-            if (newBoard.getCell(x, y) == ' ') {
-              val (randomLetter, newRand) = f(rand)
-              val updatedBoard = newBoard.fillOneCell(randomLetter, (x, y))
-              fillEntireBoard(updatedBoard, newRand, x + 1, y)
-            } else {
-              fillEntireBoard(newBoard, rand, x + 1, y)
-            }
+  def completeBoardRandomly(rand: MyRandom, f: MyRandom => (Char, MyRandom)): (BoardData, MyRandom) = {
+    @tailrec
+    def fillEntireBoard(newBoard: BoardData, rand: MyRandom, x: Int, y: Int): BoardData = {
+      if (y < rows) {
+        if (x < columns) {
+          if (newBoard.getCell(x, y) == ' ') {
+            val (randomLetter, newRand) = f(rand)
+            val updatedBoard = newBoard.fillOneCell(randomLetter, (x, y))
+            fillEntireBoard(updatedBoard, newRand, x + 1, y)
           } else {
-            fillEntireBoard(newBoard, rand, 0, y + 1)
+            fillEntireBoard(newBoard, rand, x + 1, y)
           }
         } else {
-          newBoard
+          fillEntireBoard(newBoard, rand, 0, y + 1)
         }
+      } else {
+        newBoard
       }
+    }
 
     (fillEntireBoard(this, rand, 0, 0), rand)
   }
