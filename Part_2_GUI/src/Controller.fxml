@@ -47,12 +47,22 @@
             <Label fx:id="letter43" alignment="CENTER" layoutX="212.0" layoutY="10.0" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <Label fx:id="letter44" alignment="CENTER" layoutX="212.0" layoutY="10.0" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
         </GridPane>
-        <TextField layoutX="339.0" layoutY="391.0">
+        <TextField fx:id="wordTextField" layoutX="339.0" layoutY="391.0">
             <font>
                 <Font size="18.0" />
             </font>
         </TextField>
         <Button fx:id="newBoardButton" layoutX="378.0" layoutY="460.0" mnemonicParsing="false" onMouseClicked="#startButtonPressed" prefHeight="36.0" prefWidth="144.0" text="Start new Board" textAlignment="CENTER" />
-      <Button fx:id="checkWordButton" layoutX="574.0" layoutY="398.0" mnemonicParsing="false" text="Check Word" />
+      <Button fx:id="checkWordButton" layoutX="574.0" layoutY="398.0" mnemonicParsing="false" onMouseClicked="#checkWordClicked" text="Check Word" visible="false" />
+      <Button fx:id="northButton" layoutX="668.0" layoutY="148.0" mnemonicParsing="false" text="North" visible="false" />
+      <Button fx:id="westButton" layoutX="616.0" layoutY="183.0" mnemonicParsing="false" text="West" visible="false" />
+      <Button fx:id="eastButton" layoutX="724.0" layoutY="183.0" mnemonicParsing="false" text="East" visible="false" />
+      <Button fx:id="southButton" layoutX="668.0" layoutY="219.0" mnemonicParsing="false" text="South" visible="false" />
+      <ChoiceBox fx:id="columnChoice" layoutX="591.0" layoutY="398.0" prefHeight="25.0" prefWidth="47.0" visible="false" />
+      <ChoiceBox fx:id="rowChoice" layoutX="649.0" layoutY="398.0" prefHeight="25.0" prefWidth="47.0" visible="false" />
+      <Label fx:id="columnLabel" layoutX="595.0" layoutY="374.0" text="Column" visible="false" />
+      <Label fx:id="rowLabel" layoutX="661.0" layoutY="374.0" text="Row" visible="false" />
+      <Button fx:id="confirmCoordsButton" layoutX="582.0" layoutY="440.0" mnemonicParsing="false" onMouseClicked="#confirmCoords" text="Confirm Coordinates" visible="false" />
+      <Label fx:id="errorCoords" layoutX="580.0" layoutY="470.0" prefHeight="17.0" prefWidth="138.0" text="Error! Fill the coordinates!" visible="false" />
     </children>
 </Pane>

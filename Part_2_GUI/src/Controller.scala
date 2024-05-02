@@ -1,7 +1,8 @@
 import RandomChar.MyRandom
+import javafx.collections.FXCollections
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.{Parent, Scene}
-import javafx.scene.control.{Button, Label}
+import javafx.scene.control.{Button, ChoiceBox, Label, TextField}
 import javafx.scene.layout.GridPane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
@@ -14,7 +15,20 @@ class Controller {
 
   @FXML private var newBoardButton: Button = _
   @FXML private var checkWordButton: Button = _
+  @FXML private var confirmCoordsButton: Button = _
+  @FXML private var northButton: Button = _
+  @FXML private var westButton: Button = _
+  @FXML private var eastButton: Button = _
+  @FXML private var southButton: Button = _
 
+  @FXML private var columnChoice: ChoiceBox[Int] = new ChoiceBox[Int]()
+  @FXML private var rowChoice: ChoiceBox[Int] = new ChoiceBox[Int]()
+
+  @FXML private var wordTextField: TextField = _
+
+  @FXML private var errorCoords: Label = _
+  @FXML private var columnLabel: Label = _
+  @FXML private var rowLabel: Label = _
   @FXML private var letter00: Label = _
   @FXML private var letter01: Label = _
   @FXML private var letter02: Label = _
@@ -46,9 +60,10 @@ class Controller {
   final val red1 = "#F4C1C1"
   final val white1 = "#FFFFFF"
 
+  var letterSelected = letter00
+
   @FXML
   def initialize(): Unit = {
-    checkWordButton.setVisible(false)
     letter00.setText("A")
     letter00.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
     letter01.setText("B")
@@ -71,7 +86,7 @@ class Controller {
     letter14.setStyle("-fx-background-color: " + blue1); // Pleasant pastel green
     letter20.setText("H")
     letter20.setStyle("-fx-background-color: " + green1); // Pleasant pastel green
-    setColor(letter20, red1)
+    setMidColor(letter20, red1)
     letter21.setText("E")
     letter21.setStyle("-fx-background-color: " + green1); // Pleasant pastel green
     letter22.setText("L")
@@ -80,7 +95,7 @@ class Controller {
     letter23.setStyle("-fx-background-color: " + green1); // Pleasant pastel green
     letter24.setText("O")
     letter24.setStyle("-fx-background-color: " + blue1); // Pleasant pastel green
-    setColor(letter24, green1)
+    setMidColor(letter24, green1)
     letter30.setText("A")
     letter30.setStyle("-fx-background-color: " + red1); // Pleasant pastel green
     letter31.setText("W")
@@ -103,8 +118,11 @@ class Controller {
     letter44.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
   }
 
+  def setColor(label: Label, colorCode:String): Unit = {
+    label.setStyle("-fx-background-color: " + colorCode)
+  }
 
-  def setColor(label: Label, colorCode: String): Unit = {
+  def setMidColor(label: Label, colorCode: String): Unit = {
     val weight = 0.5; // Increased weight for more influence of colorCode
     val currentColor = getColorValue(label)
     val newColor = {
@@ -122,6 +140,7 @@ class Controller {
   def resetColor(label: Label): Unit = {
     label.setStyle("-fx-background-color: " + white1)
   }
+
 
   def getColorValue(label: Label): String = {
     val styleString = label.getStyle()
@@ -184,6 +203,33 @@ class Controller {
     }
     changeGUI(0, 0)
     filledBoard
+  }
+
+  def checkWordClicked(): Unit = {
+    checkWordButton.setVisible(false)
+    confirmCoordsButton.setVisible(true)
+    val items = FXCollections.observableArrayList(0, 1, 2, 3, 4)
+    columnLabel.setVisible(true)
+    columnChoice.setItems(items)
+    columnChoice.setVisible(true)
+    rowLabel.setVisible(true)
+    rowChoice.setItems(items)
+    rowChoice.setVisible(true)
+  }
+
+  def confirmCoords(): Unit = {
+    if(columnChoice.getValue != null && rowChoice.getValue != null) {
+      errorCoords.setVisible(false)
+      northButton.setVisible(true)
+      westButton.setVisible(true)
+      eastButton.setVisible(true)
+      southButton.setVisible(true)
+    } else {
+      errorCoords.setVisible(true)
+    }
+  }
+
+  def northClicked(): Unit = {
   }
 
 }
