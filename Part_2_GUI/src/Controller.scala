@@ -20,6 +20,7 @@ class Controller {
   @FXML private var westButton: Button = _
   @FXML private var eastButton: Button = _
   @FXML private var southButton: Button = _
+  @FXML private var startNewGameButton: Button = _
 
   @FXML private var columnChoice: ChoiceBox[Int] = new ChoiceBox[Int]()
   @FXML private var rowChoice: ChoiceBox[Int] = new ChoiceBox[Int]()
@@ -159,9 +160,21 @@ class Controller {
   @FXML private var startButton: Button = _
 
   def startButtonPressed(): Unit = {
-    //println("start button clicked")
     val game = createNewTestBoard()
+    startNewGameButton.setVisible(false)
+    newBoardButton.setVisible(true)
+    wordTextField.setVisible(true)
     checkWordButton.setVisible(true)
+    confirmCoordsButton.setVisible(false)
+    columnLabel.setVisible(false)
+    columnChoice.setVisible(false)
+    rowLabel.setVisible(false)
+    rowChoice.setVisible(false)
+    errorCoords.setVisible(false)
+    northButton.setVisible(false)
+    westButton.setVisible(false)
+    eastButton.setVisible(false)
+    southButton.setVisible(false)
   }
 
   private def createNewTestBoard(): BoardData = {
@@ -211,7 +224,7 @@ class Controller {
     checkWordButton.setVisible(false)
     confirmCoordsButton.setVisible(true)
     selectedWord = wordTextField.getText
-    val items = FXCollections.observableArrayList(0, 1, 2, 3, 4)
+    val items = FXCollections.observableArrayList(1, 2, 3, 4, 5)
     columnLabel.setVisible(true)
     columnChoice.setItems(items)
     columnChoice.setVisible(true)
@@ -230,7 +243,7 @@ class Controller {
           Array(letter30, letter31, letter32, letter33, letter34),
           Array(letter40, letter41, letter42, letter43, letter44))
       }
-      selectedCoords = ((rowChoice.getValue), (columnChoice.getValue))
+      selectedCoords = ((rowChoice.getValue)-1, (columnChoice.getValue)-1)
       northButton.setVisible(true)
       westButton.setVisible(true)
       eastButton.setVisible(true)
