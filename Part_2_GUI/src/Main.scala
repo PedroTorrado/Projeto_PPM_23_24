@@ -5,7 +5,7 @@ import javafx.stage.Stage
 
 class Main extends Application {
   override def start(primaryStage: Stage): Unit = {
-    primaryStage.setTitle("My Hello World App")
+    primaryStage.setTitle("ZigZag")
     val fxmlLoader =
       new FXMLLoader(getClass.getResource("Controller.fxml"))
     val mainViewRoot: Parent = fxmlLoader.load()
