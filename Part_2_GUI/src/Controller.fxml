@@ -54,15 +54,19 @@
         </TextField>
         <Button fx:id="newBoardButton" layoutX="378.0" layoutY="460.0" mnemonicParsing="false" onMouseClicked="#startButtonPressed" prefHeight="36.0" prefWidth="144.0" text="Start new Board" textAlignment="CENTER" />
       <Button fx:id="checkWordButton" layoutX="574.0" layoutY="398.0" mnemonicParsing="false" onMouseClicked="#checkWordClicked" text="Check Word" visible="false" />
-      <Button fx:id="northButton" layoutX="668.0" layoutY="148.0" mnemonicParsing="false" text="North" visible="false" />
-      <Button fx:id="westButton" layoutX="616.0" layoutY="183.0" mnemonicParsing="false" text="West" visible="false" />
-      <Button fx:id="eastButton" layoutX="724.0" layoutY="183.0" mnemonicParsing="false" text="East" visible="false" />
-      <Button fx:id="southButton" layoutX="668.0" layoutY="219.0" mnemonicParsing="false" text="South" visible="false" />
+      <Button fx:id="northButton" layoutX="666.0" layoutY="138.0" mnemonicParsing="false" onAction="#NorthClicked" prefHeight="25.0" prefWidth="50.0" rotate="270.0" text="---&gt;" visible="false" wrapText="true" />
+      <Button fx:id="westButton" layoutX="624.0" layoutY="181.0" mnemonicParsing="false" onAction="#WestClicked" prefHeight="25.0" prefWidth="50.0" text="&lt;---" visible="false" />
+      <Button fx:id="eastButton" layoutX="711.0" layoutY="181.0" mnemonicParsing="false" onAction="#EastClicked" prefHeight="25.0" prefWidth="50.0" text="---&gt;" visible="false" />
+      <Button fx:id="southButton" layoutX="666.0" layoutY="225.0" mnemonicParsing="false" onAction="#SouthClicked" prefHeight="25.0" prefWidth="50.0" rotate="90.0" text="---&gt;" visible="false" />
       <ChoiceBox fx:id="columnChoice" layoutX="591.0" layoutY="398.0" prefHeight="25.0" prefWidth="47.0" visible="false" />
       <ChoiceBox fx:id="rowChoice" layoutX="649.0" layoutY="398.0" prefHeight="25.0" prefWidth="47.0" visible="false" />
       <Label fx:id="columnLabel" layoutX="595.0" layoutY="374.0" text="Column" visible="false" />
       <Label fx:id="rowLabel" layoutX="661.0" layoutY="374.0" text="Row" visible="false" />
       <Button fx:id="confirmCoordsButton" layoutX="582.0" layoutY="440.0" mnemonicParsing="false" onMouseClicked="#confirmCoords" text="Confirm Coordinates" visible="false" />
       <Label fx:id="errorCoords" layoutX="580.0" layoutY="470.0" prefHeight="17.0" prefWidth="138.0" text="Error! Fill the coordinates!" visible="false" />
+      <Button fx:id="northEastButton" layoutX="715.0" layoutY="139.0" mnemonicParsing="false" onAction="#NorthEastClicked" prefHeight="25.0" prefWidth="50.0" rotate="-45.0" text="---&gt;" visible="false" wrapText="true" />
+      <Button fx:id="northWestButton" layoutX="618.0" layoutY="137.0" mnemonicParsing="false" onAction="#NorthWestClicked" prefHeight="25.0" prefWidth="50.0" rotate="-135.0" text="---&gt;" visible="false" wrapText="true" />
+      <Button fx:id="southEastButton" layoutX="712.0" layoutY="227.0" mnemonicParsing="false" onAction="#SouthEastClicked" prefHeight="25.0" prefWidth="50.0" rotate="45.0" text="---&gt;" visible="false" wrapText="true" />
+      <Button fx:id="southWestButton" layoutX="619.0" layoutY="226.0" mnemonicParsing="false" onAction="#SouthWestClicked" prefHeight="25.0" prefWidth="50.0" rotate="135.0" text="---&gt;" visible="false" wrapText="true" />
     </children>
 </Pane>
