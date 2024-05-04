@@ -3,6 +3,7 @@ import RandomChar.MyRandom
 import scala.annotation.tailrec
 import scala.util.Random
 import scala.collection.mutable.ListBuffer
+import scala.io.Source
 
 object Direction extends Enumeration {
   type Direction = Value
@@ -145,10 +146,10 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     // Função interna para imprimir cada linha da grade
     def displayRow(row: Array[Char]): Unit = {
       if (row.nonEmpty) {
-        print(row.head + " ") // Imprimir o primeiro elemento da linha seguido de um espaço
+        //print(row.head + " ") // Imprimir o primeiro elemento da linha seguido de um espaço
         displayRow(row.tail) // Chamar recursivamente para o restante dos elementos da linha
       } else {
-        println() // Imprimir uma nova linha quando todos os elementos da linha foram impressos
+        //println() // Imprimir uma nova linha quando todos os elementos da linha foram impressos
       }
     }
 
@@ -163,6 +164,42 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     // Chamar a função displayGrid inicialmente com a matriz bidimensional
     displayGrid(gridArray)
   }
+
+  def newWords(fileName: String): BoardData = {
+    // Read the file and store lines in a list
+    val fileSource = Source.fromFile("listWords.txt")
+    val lines = fileSource.getLines().toList
+    fileSource.close()
+
+    // Calculate the number of lines
+    val numLines = lines.size
+
+    // Choose a random line index
+    val rand = MyRandom()
+    val (randomInt, nextRand) = rand.nextInt
+
+    val lineNumber = (randomInt % numLines).abs
+    //println(lineNumber)
+    // Get the random line
+    val fileContent = lines(lineNumber)
+
+    // Define a regular expression pattern to match coordinate pairs
+    val coordPattern = """\((\d+),\s*(\d+)\)""".r
+
+    // Extract words from the content excluding numbers
+    val words = fileContent.split("[^a-zA-Z]+").filter(_.nonEmpty).toList
+
+    // Extract coordinates from the content
+    // Extract coordinates from the content
+    val coords = fileContent.split("/").filter(_.nonEmpty).tail.map { segment =>
+      coordPattern.findAllMatchIn(segment).map { m =>
+        (m.group(1).toInt, m.group(2).toInt): Coord2D
+      }.toList
+    }.toList
+
+    setBoardWithWords(words, coords)
+  }
+
 }
 
 object BoardData {

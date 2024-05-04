@@ -169,17 +169,13 @@ class Controller {
     // Create an empty board
     val board = BoardData.empty(5, 5)
 
-    // Define the positions and word for the word "PROGRAMAR"
-    val programarPositions = List((3, 3), (2, 3), (1, 2), (1, 1), (2, 1), (3, 0), (3, 1), (4, 2), (4, 3))
-
-    // Fill the word "PROGRAMAR" on the board
-    val boardWithProgramar = board.setBoardWithWords(List("PROGRAMAR"), List(programarPositions))
-
     val numbersFile = "seed.txt" // Define the file to store seed and random numbers
     val rand = MyRandom() // Create an instance of MyRandom with the file
 
+    val FinalBoard = board.newWords("listWords.txt")
+
     // Call completeBoardRandomly with the MyRandom instance
-    filledBoard = boardWithProgramar.completeBoardRandomly(rand, MyRandom.randomChar)._1
+    val (filledBoard, _) = FinalBoard.completeBoardRandomly(rand, MyRandom.randomChar)
 
     filledBoard
 
