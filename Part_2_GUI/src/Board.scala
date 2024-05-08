@@ -114,39 +114,34 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     checkWord(startCoord, word)
   }
 
-  def play(word: String, startCoord: Coord2D, initialDirection: Direction.Value): Boolean = {
-    // Base case: If the word is empty, it's found
-    if (word.isEmpty) {
-      println("Word found: " + true)
-      true
-    } else {
-      val currentLetter = getCell(startCoord._1, startCoord._2)
+  def play(word: String, startCoord: Coord2D, initialDirection: Direction.Value, coords: Array[Coord2D]): (Boolean, Array[Coord2D]) = {
+    def playRec(word: String, startCoord: Coord2D, initialDirection: Direction.Value, coords: Array[Coord2D]): (Boolean, Array[Coord2D]) = word.isEmpty match {
+      case true => (true, coords)
+      case false => {
+        val iCoords = coords :+ startCoord
+        val currentLetter = getCell(startCoord._1, startCoord._2)
+        // Check if the current letter matches the first letter of the word
+        if (word.head == currentLetter) {
+          // Check all directions for the remaining word
+          val remainingWord = word.tail
+          val directions = Direction.values
+          // Check each direction
+          val foundInAnyDirection = directions.exists { direction =>
+            // Compute the next coordinate based on the current direction
+            val nextCoord = computeNextCoord(startCoord, direction)
+            // Check if the next coordinate is valid
+            val isValidNextCoord = isValidCoord(nextCoord)
+            // Recur with the remaining word and the next coordinate in the current direction
+            isValidNextCoord && playRec(remainingWord, nextCoord, direction, iCoords)._1
+          }
 
-      // Check if the current letter matches the first letter of the word
-      if (word.head == currentLetter) {
-        // Check all directions for the remaining word
-        val remainingWord = word.tail
-        val directions = Direction.values
-
-        // Check each direction
-        val foundInAnyDirection = directions.exists { direction =>
-          // Compute the next coordinate based on the current direction
-          val nextCoord = computeNextCoord(startCoord, direction)
-
-          // Check if the next coordinate is valid
-          val isValidNextCoord = isValidCoord(nextCoord)
-
-          // Recur with the remaining word and the next coordinate in the current direction
-          isValidNextCoord && play(remainingWord, nextCoord, direction)
+        } else {
+          // If the current letter doesn't match, the word cannot be found from this starting point
+          (false, coords)
         }
-        println("Word found: " + foundInAnyDirection)
-        foundInAnyDirection
-      } else {
-        // If the current letter doesn't match, the word cannot be found from this starting point
-        println("Word found: " + false)
-        false
       }
     }
+    playRec(word, startCoord, initialDirection, coords)
   }
 
   def display(): Unit = {

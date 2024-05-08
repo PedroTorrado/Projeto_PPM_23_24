@@ -1,4 +1,5 @@
 import RandomChar.MyRandom
+import com.sun.prism.image.Coords
 import javafx.collections.FXCollections
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.{Parent, Scene}
@@ -68,6 +69,8 @@ class Controller {
   var selectedCoords = (0, 0)
   var selectedWord = ""
   var filledBoard = new BoardData(0, 0, null)
+
+  type Coord2D = (Int, Int)
 
   @FXML
   def initialize(): Unit = {
@@ -196,18 +199,18 @@ class Controller {
 
     val FinalBoard = board.newWords("listWords.txt")
 
+    val labelMatrix  = {
+      Array(Array(letter00, letter01, letter02, letter03, letter04),
+        Array(letter10, letter11, letter12, letter13, letter14),
+        Array(letter20, letter21, letter22, letter23, letter24),
+        Array(letter30, letter31, letter32, letter33, letter34),
+        Array(letter40, letter41, letter42, letter43, letter44))
+    }
+
     // Call completeBoardRandomly with the MyRandom instance
     filledBoard = FinalBoard.completeBoardRandomly(rand, MyRandom.randomChar)._1
 
     filledBoard.display()
-
-    val labelMatrix  = {
-        Array(Array(letter00, letter01, letter02, letter03, letter04),
-          Array(letter10, letter11, letter12, letter13, letter14),
-          Array(letter20, letter21, letter22, letter23, letter24),
-          Array(letter30, letter31, letter32, letter33, letter34),
-          Array(letter40, letter41, letter42, letter43, letter44))
-    }
 
     @tailrec
     def changeGUI(x: Int, y: Int): Unit = x match {
@@ -228,7 +231,7 @@ class Controller {
   def checkWordClicked(): Unit = {
     checkWordButton.setVisible(false)
     confirmCoordsButton.setVisible(true)
-    selectedWord = wordTextField.getText
+    selectedWord = (wordTextField.getText).toUpperCase
     val items = FXCollections.observableArrayList(1, 2, 3, 4, 5)
     columnLabel.setVisible(true)
     columnChoice.setItems(items)
@@ -264,42 +267,73 @@ class Controller {
 
   def NorthClicked(): Unit = {
     println("North Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.North)
+    val coords = Array[Coord2D]()
+    filledBoard.play(selectedWord, selectedCoords, Direction.North, coords)
   }
 
   def NorthWestClicked(): Unit = {
     println("NorthWest Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest)
+    val coords = Array[Coord2D]()
+    filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest, coords)
   }
 
   def NorthEastClicked(): Unit = {
     println("NorthEast Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast)
+    val coords = Array[Coord2D]()
+    filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast, coords)
   }
 
   def SouthClicked(): Unit = {
     println("South Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.South)
+    val coords = Array[Coord2D]()
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.South, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, green1)
+    }
   }
 
   def SouthEastClicked(): Unit = {
     println("SouthEast Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast)
+    val coords = Array[Coord2D]()
+    filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast, coords)
   }
 
   def SouthWestClicked(): Unit = {
     println("SouthWest Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest)
+    val coords = Array[Coord2D]()
+    filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest, coords)
   }
 
   def EastClicked(): Unit = {
     println("East Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.East)
+    val coords = Array[Coord2D]()
+    filledBoard.play(selectedWord, selectedCoords, Direction.East, coords)
   }
 
   def WestClicked(): Unit = {
     println("West Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.West)
+    val coords = Array[Coord2D]()
+    filledBoard.play(selectedWord, selectedCoords, Direction.West, coords)
+  }
+
+  def paintSquares(coords: Array[Coord2D], colorCode: String): Unit = {
+    val labelMatrix  = {
+      Array(Array(letter00, letter01, letter02, letter03, letter04),
+        Array(letter10, letter11, letter12, letter13, letter14),
+        Array(letter20, letter21, letter22, letter23, letter24),
+        Array(letter30, letter31, letter32, letter33, letter34),
+        Array(letter40, letter41, letter42, letter43, letter44))
+    }
+    def paint(coords: Array[Coord2D], size: Int): Unit = size match {
+      case 0 =>
+      case _ => {
+        val nextCord = coords.head
+        setColor(labelMatrix(nextCord._1)(nextCord._2), colorCode)
+        paint(coords.tail, size - 1)
+      }
+    }
+    paint(coords, coords.length)
   }
 
 }
