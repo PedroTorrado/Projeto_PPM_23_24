@@ -179,6 +179,11 @@ class Controller {
     westButton.setVisible(false)
     eastButton.setVisible(false)
     southButton.setVisible(false)
+    northEastButton.setVisible(false)
+    northWestButton.setVisible(false)
+    southEastButton.setVisible(false)
+    southWestButton.setVisible(false)
+    wordTextField.setText("")
   }
 
   private def createNewTestBoard(): BoardData = {
@@ -192,7 +197,7 @@ class Controller {
     val FinalBoard = board.newWords("listWords.txt")
 
     // Call completeBoardRandomly with the MyRandom instance
-    val (filledBoard, _) = FinalBoard.completeBoardRandomly(rand, MyRandom.randomChar)
+    filledBoard = FinalBoard.completeBoardRandomly(rand, MyRandom.randomChar)._1
 
     filledBoard.display()
 

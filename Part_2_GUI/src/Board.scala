@@ -117,6 +117,7 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
   def play(word: String, startCoord: Coord2D, initialDirection: Direction.Value): Boolean = {
     // Base case: If the word is empty, it's found
     if (word.isEmpty) {
+      println("Word found: " + true)
       true
     } else {
       val currentLetter = getCell(startCoord._1, startCoord._2)
@@ -138,10 +139,11 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
           // Recur with the remaining word and the next coordinate in the current direction
           isValidNextCoord && play(remainingWord, nextCoord, direction)
         }
-
+        println("Word found: " + foundInAnyDirection)
         foundInAnyDirection
       } else {
         // If the current letter doesn't match, the word cannot be found from this starting point
+        println("Word found: " + false)
         false
       }
     }
