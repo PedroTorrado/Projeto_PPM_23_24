@@ -65,10 +65,12 @@ class Controller {
   final val blue1 = "#89cEEE"
   final val red1 = "#F4C1C1"
   final val white1 = "#FFFFFF"
+  final val colors = Array[String](green1, red1, blue1)
 
   var selectedCoords = (0, 0)
   var selectedWord = ""
   var filledBoard = new BoardData(0, 0, null)
+  var wordsFound = 0
 
   type Coord2D = (Int, Int)
 
@@ -171,22 +173,7 @@ class Controller {
     startNewGameButton.setVisible(false)
     newBoardButton.setVisible(true)
     wordTextField.setVisible(true)
-    checkWordButton.setVisible(true)
-    confirmCoordsButton.setVisible(false)
-    columnLabel.setVisible(false)
-    columnChoice.setVisible(false)
-    rowLabel.setVisible(false)
-    rowChoice.setVisible(false)
-    errorCoords.setVisible(false)
-    northButton.setVisible(false)
-    westButton.setVisible(false)
-    eastButton.setVisible(false)
-    southButton.setVisible(false)
-    northEastButton.setVisible(false)
-    northWestButton.setVisible(false)
-    southEastButton.setVisible(false)
-    southWestButton.setVisible(false)
-    wordTextField.setText("")
+    clearStuff()
   }
 
   private def createNewTestBoard(): BoardData = {
@@ -268,19 +255,37 @@ class Controller {
   def NorthClicked(): Unit = {
     println("North Click")
     val coords = Array[Coord2D]()
-    filledBoard.play(selectedWord, selectedCoords, Direction.North, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.North, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def NorthWestClicked(): Unit = {
     println("NorthWest Click")
     val coords = Array[Coord2D]()
-    filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def NorthEastClicked(): Unit = {
     println("NorthEast Click")
     val coords = Array[Coord2D]()
-    filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def SouthClicked(): Unit = {
@@ -289,32 +294,58 @@ class Controller {
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.South, coords)
     println("Word found? " + result._1 + "\n Coords: " + result._2(0))
     if(result._1) {
-      paintSquares(result._2, green1)
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
     }
+    clearStuff()
   }
 
   def SouthEastClicked(): Unit = {
     println("SouthEast Click")
     val coords = Array[Coord2D]()
-    filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def SouthWestClicked(): Unit = {
     println("SouthWest Click")
     val coords = Array[Coord2D]()
-    filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def EastClicked(): Unit = {
     println("East Click")
     val coords = Array[Coord2D]()
-    filledBoard.play(selectedWord, selectedCoords, Direction.East, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.East, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def WestClicked(): Unit = {
     println("West Click")
     val coords = Array[Coord2D]()
-    filledBoard.play(selectedWord, selectedCoords, Direction.West, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.West, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def paintSquares(coords: Array[Coord2D], colorCode: String): Unit = {
@@ -329,11 +360,36 @@ class Controller {
       case 0 =>
       case _ => {
         val nextCord = coords.head
-        setColor(labelMatrix(nextCord._1)(nextCord._2), colorCode)
-        paint(coords.tail, size - 1)
+        val square = labelMatrix(nextCord._1)(nextCord._2)
+        if(square.getStyle == ("-fx-background-color: " + white1)) {
+          setColor(square, colorCode)
+          paint(coords.tail, size - 1)
+        } else {
+          setMidColor(square, colorCode)
+          paint(coords.tail, size - 1)
+        }
       }
     }
     paint(coords, coords.length)
+  }
+
+  def clearStuff(): Unit = {
+    checkWordButton.setVisible(true)
+    confirmCoordsButton.setVisible(false)
+    columnLabel.setVisible(false)
+    columnChoice.setVisible(false)
+    rowLabel.setVisible(false)
+    rowChoice.setVisible(false)
+    errorCoords.setVisible(false)
+    northButton.setVisible(false)
+    westButton.setVisible(false)
+    eastButton.setVisible(false)
+    southButton.setVisible(false)
+    northEastButton.setVisible(false)
+    northWestButton.setVisible(false)
+    southEastButton.setVisible(false)
+    southWestButton.setVisible(false)
+    wordTextField.setText("")
   }
 
 }
