@@ -3,6 +3,7 @@ import RandomChar.MyRandom
 import scala.annotation.tailrec
 import scala.util.Random
 import scala.collection.mutable.ListBuffer
+import scala.io.Source
 
 object Direction extends Enumeration {
   type Direction = Value
@@ -114,26 +115,34 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
   }
 
   def play(word: String, startCoord: Coord2D, initialDirection: Direction.Value): Boolean = {
+    // Base case: If the word is empty, it's found
     if (word.isEmpty) {
-      true // Empty word, so it's found
+      true
     } else {
-      val nextCoord = computeNextCoord(startCoord, initialDirection)
-      val remainingWord = word.tail
+      val currentLetter = getCell(startCoord._1, startCoord._2)
 
-      // Check if the next coordinate is valid
-      val isValidNextCoord = isValidCoord(nextCoord)
+      // Check if the current letter matches the first letter of the word
+      if (word.head == currentLetter) {
+        // Check all directions for the remaining word
+        val remainingWord = word.tail
+        val directions = Direction.values
 
-      if (isValidNextCoord && word.head == getCell(startCoord._1, startCoord._2)) {
-        val directions = Direction.values.filterNot(_ == initialDirection) // Exclude initial direction
-        val foundInOtherDirections = directions.exists(direction => play(remainingWord, nextCoord, direction))
+        // Check each direction
+        val foundInAnyDirection = directions.exists { direction =>
+          // Compute the next coordinate based on the current direction
+          val nextCoord = computeNextCoord(startCoord, direction)
 
-        if (foundInOtherDirections) {
-          true // Word found in at least one direction
-        } else {
-          false // Word not found in any direction
+          // Check if the next coordinate is valid
+          val isValidNextCoord = isValidCoord(nextCoord)
+
+          // Recur with the remaining word and the next coordinate in the current direction
+          isValidNextCoord && play(remainingWord, nextCoord, direction)
         }
+
+        foundInAnyDirection
       } else {
-        false // First letter doesn't match the letter at startCoord or nextCoord is invalid
+        // If the current letter doesn't match, the word cannot be found from this starting point
+        false
       }
     }
   }
@@ -145,10 +154,10 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     // Função interna para imprimir cada linha da grade
     def displayRow(row: Array[Char]): Unit = {
       if (row.nonEmpty) {
-        print(row.head + " ") // Imprimir o primeiro elemento da linha seguido de um espaço
+        //print(row.head + " ") // Imprimir o primeiro elemento da linha seguido de um espaço
         displayRow(row.tail) // Chamar recursivamente para o restante dos elementos da linha
       } else {
-        println() // Imprimir uma nova linha quando todos os elementos da linha foram impressos
+        //println() // Imprimir uma nova linha quando todos os elementos da linha foram impressos
       }
     }
 
@@ -163,6 +172,42 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     // Chamar a função displayGrid inicialmente com a matriz bidimensional
     displayGrid(gridArray)
   }
+
+  def newWords(fileName: String): BoardData = {
+    // Read the file and store lines in a list
+    val fileSource = Source.fromFile("listWords.txt")
+    val lines = fileSource.getLines().toList
+    fileSource.close()
+
+    // Calculate the number of lines
+    val numLines = lines.size
+
+    // Choose a random line index
+    val rand = MyRandom()
+    val (randomInt, nextRand) = rand.nextInt
+
+    val lineNumber = (randomInt % numLines).abs
+    //println(lineNumber)
+    // Get the random line
+    val fileContent = lines(lineNumber)
+
+    // Define a regular expression pattern to match coordinate pairs
+    val coordPattern = """\((\d+),\s*(\d+)\)""".r
+
+    // Extract words from the content excluding numbers
+    val words = fileContent.split("[^a-zA-Z]+").filter(_.nonEmpty).toList
+
+    // Extract coordinates from the content
+    // Extract coordinates from the content
+    val coords = fileContent.split("/").filter(_.nonEmpty).tail.map { segment =>
+      coordPattern.findAllMatchIn(segment).map { m =>
+        (m.group(1).toInt, m.group(2).toInt): Coord2D
+      }.toList
+    }.toList
+
+    setBoardWithWords(words, coords)
+  }
+
 }
 
 object BoardData {

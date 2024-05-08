@@ -21,6 +21,10 @@ class Controller {
   @FXML private var eastButton: Button = _
   @FXML private var southButton: Button = _
   @FXML private var startNewGameButton: Button = _
+  @FXML private var northWestButton: Button = _
+  @FXML private var northEastButton: Button = _
+  @FXML private var southEastButton: Button = _
+  @FXML private var southWestButton: Button = _
 
   @FXML private var columnChoice: ChoiceBox[Int] = new ChoiceBox[Int]()
   @FXML private var rowChoice: ChoiceBox[Int] = new ChoiceBox[Int]()
@@ -182,19 +186,15 @@ class Controller {
     // Create an empty board
     val board = BoardData.empty(5, 5)
 
-    // Define the positions and word for the word "PROGRAMAR"
-    val programarPositions = List((3, 3), (2, 3), (1, 2), (1, 1), (2, 1), (3, 0), (3, 1), (4, 2), (4, 3))
-
-    // Fill the word "PROGRAMAR" on the board
-    val boardWithProgramar = board.setBoardWithWords(List("PROGRAMAR"), List(programarPositions))
-
     val numbersFile = "seed.txt" // Define the file to store seed and random numbers
     val rand = MyRandom() // Create an instance of MyRandom with the file
 
-    // Call completeBoardRandomly with the MyRandom instance
-    filledBoard = boardWithProgramar.completeBoardRandomly(rand, MyRandom.randomChar)._1
+    val FinalBoard = board.newWords("listWords.txt")
 
-    filledBoard
+    // Call completeBoardRandomly with the MyRandom instance
+    val (filledBoard, _) = FinalBoard.completeBoardRandomly(rand, MyRandom.randomChar)
+
+    filledBoard.display()
 
     val labelMatrix  = {
         Array(Array(letter00, letter01, letter02, letter03, letter04),
@@ -248,14 +248,53 @@ class Controller {
       westButton.setVisible(true)
       eastButton.setVisible(true)
       southButton.setVisible(true)
+      northEastButton.setVisible(true)
+      northWestButton.setVisible(true)
+      southEastButton.setVisible(true)
+      southWestButton.setVisible(true)
     } else {
       errorCoords.setVisible(true)
     }
   }
 
-  def northClicked(): Unit = {
+  def NorthClicked(): Unit = {
+    println("North Click")
     filledBoard.play(selectedWord, selectedCoords, Direction.North)
+  }
 
+  def NorthWestClicked(): Unit = {
+    println("NorthWest Click")
+    filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest)
+  }
+
+  def NorthEastClicked(): Unit = {
+    println("NorthEast Click")
+    filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast)
+  }
+
+  def SouthClicked(): Unit = {
+    println("South Click")
+    filledBoard.play(selectedWord, selectedCoords, Direction.South)
+  }
+
+  def SouthEastClicked(): Unit = {
+    println("SouthEast Click")
+    filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast)
+  }
+
+  def SouthWestClicked(): Unit = {
+    println("SouthWest Click")
+    filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest)
+  }
+
+  def EastClicked(): Unit = {
+    println("East Click")
+    filledBoard.play(selectedWord, selectedCoords, Direction.East)
+  }
+
+  def WestClicked(): Unit = {
+    println("West Click")
+    filledBoard.play(selectedWord, selectedCoords, Direction.West)
   }
 
 }

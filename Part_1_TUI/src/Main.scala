@@ -5,30 +5,31 @@ object Main {
     jogoPalavrasCruzadas()
   }
 
-  private def jogoPalavrasCruzadas(): Unit = {
+  private def jogoPalavrasCruzadas(randomFilledBoard: Option[BoardData] = None): Unit = {
     println(s"Welcome to Crossword Puzzle Game!\n")
 
-    var randomFilledBoard: Option[BoardData] = None
-
-    Iterator.continually(promptOption())
-      .takeWhile(_ != "3")
-      .foreach {
-        case "1" =>
-          randomFilledBoard = Some(createNewTestBoard())
-          println(s"New board created:")
-          randomFilledBoard.foreach(_.display())
-        case "2" =>
-          randomFilledBoard match {
-            case Some(board) =>
-              play(board)
-            case None => println(s"Please start a new board first.")
-          }
-        case "4" =>
-          changeTextColor()
-        case _ =>
-          println(s"Invalid option. Please select a valid option.")
-      }
+    promptOption() match {
+      case "1" =>
+        val newBoard = createNewTestBoard()
+        println(s"New board created:")
+        newBoard.display()
+        jogoPalavrasCruzadas(Some(newBoard))
+      case "2" =>
+        randomFilledBoard match {
+          case Some(board) => play(board)
+          case None        => println(s"Please start a new board first.")
+        }
+        jogoPalavrasCruzadas(randomFilledBoard)
+      case "4" =>
+        changeTextColor()
+        jogoPalavrasCruzadas(randomFilledBoard)
+      case "3" => // Exit
+      case _   =>
+        println(s"Invalid option. Please select a valid option.")
+        jogoPalavrasCruzadas(randomFilledBoard)
+    }
   }
+
 
   private def promptOption(): String = {
     println(s"Options:")
@@ -41,8 +42,6 @@ object Main {
   }
 
   private def createNewTestBoard(): BoardData = {
-    val seed = System.currentTimeMillis() // Use current time as seed for randomness
-    val rand = MyRandom(seed) // Create a MyRandom object with the seed
 
     // Create an empty board
     val board = BoardData.empty(5, 5)
@@ -51,12 +50,16 @@ object Main {
     val programarPositions = List((3, 3), (2, 3), (1, 2), (1, 1), (2,1), (3, 0), (3, 1), (4, 2), (4,3))
 
     // Fill the word "PROGRAMAR" on the board
-    val boardWithProgramar = board.setBoardWithWords(List("PROGRAMAR"), List(programarPositions))
 
-    val MLPositions = List((0, 0), (0, 1))
-    val boardWithProgramarML = boardWithProgramar.setBoardWithWords(List("ML"), List(MLPositions))
+    val numbersFile = "seed.txt" // Define the file to store seed and random numbers
+    val rand = MyRandom() // Create an instance of MyRandom with the file
 
-    boardWithProgramarML.completeBoardRandomly(rand, RandomChar.randomChar)._1
+    val FinalBoard = board.newWords("listWords.txt")
+
+    // Call completeBoardRandomly with the MyRandom instance
+    val (filledBoard, _) = FinalBoard.completeBoardRandomly(rand, MyRandom.randomChar)
+
+    filledBoard
   }
 
   private def play(board: BoardData): Unit = {
@@ -74,15 +77,12 @@ object Main {
     val direction = getDirection()
 
     // Check if the word is found
-    val wordFound = board.playUntraditional(word, startCoord, direction)
+    val wordFound = board.play(word, startCoord, direction)
     println(s"\nThe word '$word' was found: $wordFound")
   }
 
   private def getCoordinate(board: BoardData): (Int, Int) = {
-    var validCoord = false
-    var startCoord: (Int, Int) = (0, 0)
-
-    while (!validCoord) {
+    def getCoordRecursively(): (Int, Int) = {
       val input = scala.io.StdIn.readLine()
       val Array(rowStr, columnStr) = input.split(" ")
 
@@ -91,18 +91,21 @@ object Main {
         val column = columnStr.toInt
 
         if (row >= 0 && row < board.rows && column >= 0 && column < board.columns) {
-          startCoord = (row, column)
-          validCoord = true
+          (row, column)
         } else {
           println(s"Invalid coordinates. Please enter again:")
+          getCoordRecursively() // Retry recursively if coordinates are invalid
         }
       } catch {
         case _: NumberFormatException =>
           println(s"Invalid input. Please enter again:")
+          getCoordRecursively() // Retry recursively if input is invalid
       }
     }
-    startCoord
+
+    getCoordRecursively() // Start the recursive process
   }
+
 
   private def getDirection(): Direction.Value = {
     val directionStr = scala.io.StdIn.readLine()
