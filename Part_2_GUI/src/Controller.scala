@@ -1,4 +1,5 @@
 import RandomChar.MyRandom
+import com.sun.prism.image.Coords
 import javafx.collections.FXCollections
 import javafx.fxml.{FXML, FXMLLoader}
 import javafx.scene.{Parent, Scene}
@@ -20,6 +21,7 @@ class Controller {
   @FXML private var westButton: Button = _
   @FXML private var eastButton: Button = _
   @FXML private var southButton: Button = _
+  @FXML private var startNewGameButton: Button = _
   @FXML private var northWestButton: Button = _
   @FXML private var northEastButton: Button = _
   @FXML private var southEastButton: Button = _
@@ -63,10 +65,14 @@ class Controller {
   final val blue1 = "#89cEEE"
   final val red1 = "#F4C1C1"
   final val white1 = "#FFFFFF"
+  final val colors = Array[String](green1, red1, blue1)
 
   var selectedCoords = (0, 0)
   var selectedWord = ""
   var filledBoard = new BoardData(0, 0, null)
+  var wordsFound = 0
+
+  type Coord2D = (Int, Int)
 
   @FXML
   def initialize(): Unit = {
@@ -163,9 +169,11 @@ class Controller {
   @FXML private var startButton: Button = _
 
   def startButtonPressed(): Unit = {
-    //println("start button clicked")
     val game = createNewTestBoard()
-    checkWordButton.setVisible(true)
+    startNewGameButton.setVisible(false)
+    newBoardButton.setVisible(true)
+    wordTextField.setVisible(true)
+    clearStuff()
   }
 
   private def createNewTestBoard(): BoardData = {
@@ -178,18 +186,18 @@ class Controller {
 
     val FinalBoard = board.newWords("listWords.txt")
 
+    val labelMatrix  = {
+      Array(Array(letter00, letter01, letter02, letter03, letter04),
+        Array(letter10, letter11, letter12, letter13, letter14),
+        Array(letter20, letter21, letter22, letter23, letter24),
+        Array(letter30, letter31, letter32, letter33, letter34),
+        Array(letter40, letter41, letter42, letter43, letter44))
+    }
+
     // Call completeBoardRandomly with the MyRandom instance
-    val (filledBoard, _) = FinalBoard.completeBoardRandomly(rand, MyRandom.randomChar)
+    filledBoard = FinalBoard.completeBoardRandomly(rand, MyRandom.randomChar)._1
 
     filledBoard.display()
-
-    val labelMatrix  = {
-        Array(Array(letter00, letter01, letter02, letter03, letter04),
-          Array(letter10, letter11, letter12, letter13, letter14),
-          Array(letter20, letter21, letter22, letter23, letter24),
-          Array(letter30, letter31, letter32, letter33, letter34),
-          Array(letter40, letter41, letter42, letter43, letter44))
-    }
 
     @tailrec
     def changeGUI(x: Int, y: Int): Unit = x match {
@@ -210,8 +218,8 @@ class Controller {
   def checkWordClicked(): Unit = {
     checkWordButton.setVisible(false)
     confirmCoordsButton.setVisible(true)
-    selectedWord = wordTextField.getText
-    val items = FXCollections.observableArrayList(0, 1, 2, 3, 4)
+    selectedWord = (wordTextField.getText).toUpperCase
+    val items = FXCollections.observableArrayList(1, 2, 3, 4, 5)
     columnLabel.setVisible(true)
     columnChoice.setItems(items)
     columnChoice.setVisible(true)
@@ -230,7 +238,7 @@ class Controller {
           Array(letter30, letter31, letter32, letter33, letter34),
           Array(letter40, letter41, letter42, letter43, letter44))
       }
-      selectedCoords = ((rowChoice.getValue), (columnChoice.getValue))
+      selectedCoords = ((rowChoice.getValue)-1, (columnChoice.getValue)-1)
       northButton.setVisible(true)
       westButton.setVisible(true)
       eastButton.setVisible(true)
@@ -246,42 +254,142 @@ class Controller {
 
   def NorthClicked(): Unit = {
     println("North Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.North)
+    val coords = Array[Coord2D]()
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.North, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def NorthWestClicked(): Unit = {
     println("NorthWest Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest)
+    val coords = Array[Coord2D]()
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def NorthEastClicked(): Unit = {
     println("NorthEast Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast)
+    val coords = Array[Coord2D]()
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def SouthClicked(): Unit = {
     println("South Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.South)
+    val coords = Array[Coord2D]()
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.South, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def SouthEastClicked(): Unit = {
     println("SouthEast Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast)
+    val coords = Array[Coord2D]()
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def SouthWestClicked(): Unit = {
     println("SouthWest Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest)
+    val coords = Array[Coord2D]()
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def EastClicked(): Unit = {
     println("East Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.East)
+    val coords = Array[Coord2D]()
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.East, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
   }
 
   def WestClicked(): Unit = {
     println("West Click")
-    filledBoard.play(selectedWord, selectedCoords, Direction.West)
+    val coords = Array[Coord2D]()
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.West, coords)
+    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+    if(result._1) {
+      paintSquares(result._2, colors(wordsFound))
+      wordsFound+=1
+    }
+    clearStuff()
+  }
+
+  def paintSquares(coords: Array[Coord2D], colorCode: String): Unit = {
+    val labelMatrix  = {
+      Array(Array(letter00, letter01, letter02, letter03, letter04),
+        Array(letter10, letter11, letter12, letter13, letter14),
+        Array(letter20, letter21, letter22, letter23, letter24),
+        Array(letter30, letter31, letter32, letter33, letter34),
+        Array(letter40, letter41, letter42, letter43, letter44))
+    }
+    def paint(coords: Array[Coord2D], size: Int): Unit = size match {
+      case 0 =>
+      case _ => {
+        val nextCord = coords.head
+        val square = labelMatrix(nextCord._1)(nextCord._2)
+        if(square.getStyle == ("-fx-background-color: " + white1)) {
+          setColor(square, colorCode)
+          paint(coords.tail, size - 1)
+        } else {
+          setMidColor(square, colorCode)
+          paint(coords.tail, size - 1)
+        }
+      }
+    }
+    paint(coords, coords.length)
+  }
+
+  def clearStuff(): Unit = {
+    checkWordButton.setVisible(true)
+    confirmCoordsButton.setVisible(false)
+    columnLabel.setVisible(false)
+    columnChoice.setVisible(false)
+    rowLabel.setVisible(false)
+    rowChoice.setVisible(false)
+    errorCoords.setVisible(false)
+    northButton.setVisible(false)
+    westButton.setVisible(false)
+    eastButton.setVisible(false)
+    southButton.setVisible(false)
+    northEastButton.setVisible(false)
+    northWestButton.setVisible(false)
+    southEastButton.setVisible(false)
+    southWestButton.setVisible(false)
+    wordTextField.setText("")
   }
 
 }

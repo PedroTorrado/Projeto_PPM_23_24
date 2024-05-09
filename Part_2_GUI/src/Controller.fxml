@@ -47,12 +47,12 @@
             <Label fx:id="letter43" alignment="CENTER" layoutX="212.0" layoutY="10.0" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <Label fx:id="letter44" alignment="CENTER" layoutX="212.0" layoutY="10.0" prefHeight="50.0" prefWidth="50.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
         </GridPane>
-        <TextField fx:id="wordTextField" layoutX="339.0" layoutY="391.0">
+        <TextField fx:id="wordTextField" layoutX="339.0" layoutY="391.0" visible="false">
             <font>
                 <Font size="18.0" />
             </font>
         </TextField>
-        <Button fx:id="newBoardButton" layoutX="378.0" layoutY="460.0" mnemonicParsing="false" onMouseClicked="#startButtonPressed" prefHeight="36.0" prefWidth="144.0" text="Start new Board" textAlignment="CENTER" />
+        <Button fx:id="newBoardButton" layoutX="378.0" layoutY="460.0" mnemonicParsing="false" onMouseClicked="#startButtonPressed" prefHeight="36.0" prefWidth="144.0" text="Start new Board" textAlignment="CENTER" visible="false" />
       <Button fx:id="checkWordButton" layoutX="574.0" layoutY="398.0" mnemonicParsing="false" onMouseClicked="#checkWordClicked" text="Check Word" visible="false" />
       <Button fx:id="northButton" layoutX="666.0" layoutY="138.0" mnemonicParsing="false" onAction="#NorthClicked" prefHeight="25.0" prefWidth="50.0" rotate="270.0" text="---&gt;" visible="false" wrapText="true" />
       <Button fx:id="westButton" layoutX="624.0" layoutY="181.0" mnemonicParsing="false" onAction="#WestClicked" prefHeight="25.0" prefWidth="50.0" text="&lt;---" visible="false" />
@@ -64,6 +64,7 @@
       <Label fx:id="rowLabel" layoutX="661.0" layoutY="374.0" text="Row" visible="false" />
       <Button fx:id="confirmCoordsButton" layoutX="582.0" layoutY="440.0" mnemonicParsing="false" onMouseClicked="#confirmCoords" text="Confirm Coordinates" visible="false" />
       <Label fx:id="errorCoords" layoutX="580.0" layoutY="470.0" prefHeight="17.0" prefWidth="138.0" text="Error! Fill the coordinates!" visible="false" />
+      <Button fx:id="startNewGameButton" layoutX="386.0" layoutY="379.0" mnemonicParsing="false" onMouseClicked="#startButtonPressed" prefHeight="39.0" prefWidth="126.0" text="Start New Game" />
       <Button fx:id="northEastButton" layoutX="715.0" layoutY="139.0" mnemonicParsing="false" onAction="#NorthEastClicked" prefHeight="25.0" prefWidth="50.0" rotate="-45.0" text="---&gt;" visible="false" wrapText="true" />
       <Button fx:id="northWestButton" layoutX="618.0" layoutY="137.0" mnemonicParsing="false" onAction="#NorthWestClicked" prefHeight="25.0" prefWidth="50.0" rotate="-135.0" text="---&gt;" visible="false" wrapText="true" />
       <Button fx:id="southEastButton" layoutX="712.0" layoutY="227.0" mnemonicParsing="false" onAction="#SouthEastClicked" prefHeight="25.0" prefWidth="50.0" rotate="45.0" text="---&gt;" visible="false" wrapText="true" />

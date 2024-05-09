@@ -1,6 +1,6 @@
 import RandomChar.MyRandom
 
-import scala.annotation.tailrec
+import scala.annotation.{tailrec, unused}
 import scala.util.Random
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
@@ -11,11 +11,11 @@ object Direction extends Enumeration {
 }
 
 case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
-  type Board = List[List[Char]]
+  private type Board = List[List[Char]]
   type Coord2D = (Int, Int)
 
   // Method to fill one cell on the board
-  def fillOneCell(letter: Char, coord: Coord2D): BoardData = {
+  private def fillOneCell(letter: Char, coord: Coord2D): BoardData = {
     if (isValidCoord(coord)) {
       val (x, y) = coord
       val updatedGrid = grid.updated(x, grid(x).updated(y, letter))
@@ -58,7 +58,7 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     (fillEntireBoard(this, rand, 0, 0), rand)
   }
 
-  def setBoardWithWords(words: List[String], positions: List[List[Coord2D]]): BoardData = {
+  private def setBoardWithWords(words: List[String], positions: List[List[Coord2D]]): BoardData = {
     def fillBoard(board: BoardData, word: String, coords: List[Coord2D]): BoardData = {
       coords.zip(word).foldLeft(board) { case (accBoard, ((x, y), char)) =>
         if (isValidCoord(x, y)) {
@@ -76,9 +76,10 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     filledBoard
   }
 
+  @unused
   def makeMatrix: Board = grid
 
-  def computeNextCoord(coord: Coord2D, direction: Direction.Value): Coord2D = {
+  private def computeNextCoord(coord: Coord2D, direction: Direction.Value): Coord2D = {
     val (x, y) = coord
     direction match {
       case Direction.North => (x - 1, y)
@@ -92,6 +93,7 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     }
   }
 
+  @unused
   def playTradicional(word: String, startCoord: Coord2D, direction: Direction.Value): Boolean = {
     @tailrec
     def checkWord(coord: Coord2D, remainingWord: String): Boolean = {
@@ -114,35 +116,35 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     checkWord(startCoord, word)
   }
 
-  def play(word: String, startCoord: Coord2D, initialDirection: Direction.Value): Boolean = {
-    // Base case: If the word is empty, it's found
-    if (word.isEmpty) {
-      true
-    } else {
+  def play(word: String, startCoord: Coord2D, initialDirection: Direction.Value, coords: Array[Coord2D]): (Boolean, Array[Coord2D]) = word.isEmpty match {
+    case true => (true, coords)
+    case false => {
+      val iCoords = coords :+ startCoord
       val currentLetter = getCell(startCoord._1, startCoord._2)
-
       // Check if the current letter matches the first letter of the word
       if (word.head == currentLetter) {
         // Check all directions for the remaining word
         val remainingWord = word.tail
         val directions = Direction.values
-
+        var savedCoords = Array[Coord2D]()
         // Check each direction
         val foundInAnyDirection = directions.exists { direction =>
           // Compute the next coordinate based on the current direction
           val nextCoord = computeNextCoord(startCoord, direction)
-
           // Check if the next coordinate is valid
-          val isValidNextCoord = isValidCoord(nextCoord)
-
-          // Recur with the remaining word and the next coordinate in the current direction
-          isValidNextCoord && play(remainingWord, nextCoord, direction)
+          if(isValidCoord(nextCoord)) {
+            // Recur with the remaining word and the next coordinate in the current direction
+            val playRec = play(remainingWord, nextCoord, direction, iCoords)
+            savedCoords = playRec._2
+            playRec._1
+          } else {
+            false
+          }
         }
-
-        foundInAnyDirection
+        (foundInAnyDirection, savedCoords)
       } else {
         // If the current letter doesn't match, the word cannot be found from this starting point
-        false
+        (false, coords)
       }
     }
   }
