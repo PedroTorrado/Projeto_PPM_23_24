@@ -16,7 +16,7 @@ class SecondController {
 
   def onPlayAgainClicked(): Unit = {
     playAgain.getScene.getWindow.hide()
-    controller.createNewTestBoard()
+    controller.startButtonPressed()
   }
 
   def onQuitClicked(): Unit = {

@@ -268,56 +268,56 @@ class Controller {
   def NorthClicked(): Unit = {
     println("North Click")
     val coords = Array[Coord2D]()
-    val result = filledBoard.play(selectedWord, selectedCoords, Direction.North, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.North, coords, true)
     directionStuff(result)
   }
 
   def NorthWestClicked(): Unit = {
     println("NorthWest Click")
     val coords = Array[Coord2D]()
-    val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest, coords, true)
     directionStuff(result)
   }
 
   def NorthEastClicked(): Unit = {
     println("NorthEast Click")
     val coords = Array[Coord2D]()
-    val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast, coords, true)
     directionStuff(result)
   }
 
   def SouthClicked(): Unit = {
     println("South Click")
     val coords = Array[Coord2D]()
-    val result = filledBoard.play(selectedWord, selectedCoords, Direction.South, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.South, coords, true)
     directionStuff(result)
   }
 
   def SouthEastClicked(): Unit = {
     println("SouthEast Click")
     val coords = Array[Coord2D]()
-    val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast, coords, true)
     directionStuff(result)
   }
 
   def SouthWestClicked(): Unit = {
     println("SouthWest Click")
     val coords = Array[Coord2D]()
-    val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest, coords, true)
     directionStuff(result)
   }
 
   def EastClicked(): Unit = {
     println("East Click")
     val coords = Array[Coord2D]()
-    val result = filledBoard.play(selectedWord, selectedCoords, Direction.East, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.East, coords, true)
     directionStuff(result)
   }
 
   def WestClicked(): Unit = {
     println("West Click")
     val coords = Array[Coord2D]()
-    val result = filledBoard.play(selectedWord, selectedCoords, Direction.West, coords)
+    val result = filledBoard.play(selectedWord, selectedCoords, Direction.West, coords, true)
     directionStuff(result)
   }
 
