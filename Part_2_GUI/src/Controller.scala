@@ -12,6 +12,8 @@ import scala.annotation.tailrec
 
 class Controller {
 
+  private var secondController: SecondController = _
+
   @FXML private var gridPane: GridPane = _
 
   @FXML private var newBoardButton: Button = _
@@ -26,6 +28,9 @@ class Controller {
   @FXML private var northEastButton: Button = _
   @FXML private var southEastButton: Button = _
   @FXML private var southWestButton: Button = _
+
+  @FXML private var playAgain: Button = _
+  @FXML private var quit: Button = _
 
   @FXML private var columnChoice: ChoiceBox[Int] = new ChoiceBox[Int]()
   @FXML private var rowChoice: ChoiceBox[Int] = new ChoiceBox[Int]()
@@ -61,11 +66,15 @@ class Controller {
   @FXML private var letter43: Label = _
   @FXML private var letter44: Label = _
 
-  final val green1 = "#c1e1c1"
-  final val blue1 = "#89cEEE"
-  final val red1 = "#F4C1C1"
-  final val white1 = "#FFFFFF"
-  final val colors = Array[String](green1, red1, blue1)
+  private final val green = "#c1e1c1"
+  private final val blue = "#89cEEE"
+  private final val red = "#F4C1C1"
+  private final val orange = "FFD8A8"
+  private final val yellow = "FFF7B7"
+  private final val white = "#FFFFFF"
+  private final val colors = Array[String](green, orange, red, blue)
+
+  final val maxWords = 3
 
   var selectedCoords = (0, 0)
   var selectedWord = ""
@@ -77,57 +86,57 @@ class Controller {
   @FXML
   def initialize(): Unit = {
     letter00.setText("A")
-    letter00.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter00.setStyle("-fx-background-color: " + white); // Pleasant pastel green
     letter01.setText("B")
-    letter01.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter01.setStyle("-fx-background-color: " + white); // Pleasant pastel green
     letter02.setText("C")
-    letter02.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter02.setStyle("-fx-background-color: " + white); // Pleasant pastel green
     letter03.setText("D")
-    letter03.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter03.setStyle("-fx-background-color: " + white); // Pleasant pastel green
     letter04.setText("E")
-    letter04.setStyle("-fx-background-color: " + blue1); // Pleasant pastel green
+    letter04.setStyle("-fx-background-color: " + blue); // Pleasant pastel green
     letter10.setText("F")
-    letter10.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter10.setStyle("-fx-background-color: " + white); // Pleasant pastel green
     letter11.setText("G")
-    letter11.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter11.setStyle("-fx-background-color: " + white); // Pleasant pastel green
     letter12.setText("H")
-    letter12.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter12.setStyle("-fx-background-color: " + white); // Pleasant pastel green
     letter13.setText("I")
-    letter13.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter13.setStyle("-fx-background-color: " + white); // Pleasant pastel green
     letter14.setText("M")
-    letter14.setStyle("-fx-background-color: " + blue1); // Pleasant pastel green
+    letter14.setStyle("-fx-background-color: " + blue); // Pleasant pastel green
     letter20.setText("H")
-    letter20.setStyle("-fx-background-color: " + green1); // Pleasant pastel green
-    setMidColor(letter20, red1)
+    letter20.setStyle("-fx-background-color: " + green); // Pleasant pastel green
+    setMidColor(letter20, red)
     letter21.setText("E")
-    letter21.setStyle("-fx-background-color: " + green1); // Pleasant pastel green
+    letter21.setStyle("-fx-background-color: " + green); // Pleasant pastel green
     letter22.setText("L")
-    letter22.setStyle("-fx-background-color: " + green1); // Pleasant pastel green
+    letter22.setStyle("-fx-background-color: " + green); // Pleasant pastel green
     letter23.setText("L")
-    letter23.setStyle("-fx-background-color: " + green1); // Pleasant pastel green
+    letter23.setStyle("-fx-background-color: " + green); // Pleasant pastel green
     letter24.setText("O")
-    letter24.setStyle("-fx-background-color: " + blue1); // Pleasant pastel green
-    setMidColor(letter24, green1)
+    letter24.setStyle("-fx-background-color: " + blue); // Pleasant pastel green
+    setMidColor(letter24, green)
     letter30.setText("A")
-    letter30.setStyle("-fx-background-color: " + red1); // Pleasant pastel green
+    letter30.setStyle("-fx-background-color: " + red); // Pleasant pastel green
     letter31.setText("W")
-    letter31.setStyle("-fx-background-color: " + blue1); // Pleasant pastel green
+    letter31.setStyle("-fx-background-color: " + blue); // Pleasant pastel green
     letter32.setText("E")
-    letter32.setStyle("-fx-background-color: " + blue1); // Pleasant pastel green
+    letter32.setStyle("-fx-background-color: " + blue); // Pleasant pastel green
     letter33.setText("L")
-    letter33.setStyle("-fx-background-color:" + blue1); // Pleasant pastel green
+    letter33.setStyle("-fx-background-color: " + blue); // Pleasant pastel green
     letter34.setText("C")
-    letter34.setStyle("-fx-background-color: " + blue1); // Pleasant pastel green
+    letter34.setStyle("-fx-background-color: " + blue); // Pleasant pastel green
     letter40.setText("L")
-    letter40.setStyle("-fx-background-color: " + red1); // Pleasant pastel green
+    letter40.setStyle("-fx-background-color: " + red); // Pleasant pastel green
     letter41.setText("L")
-    letter41.setStyle("-fx-background-color: " + red1); // Pleasant pastel green
+    letter41.setStyle("-fx-background-color: " + red); // Pleasant pastel green
     letter42.setText("O")
-    letter42.setStyle("-fx-background-color: " + red1); // Pleasant pastel green
+    letter42.setStyle("-fx-background-color: " + red); // Pleasant pastel green
     letter43.setText("X")
-    letter43.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter43.setStyle("-fx-background-color: " + white); // Pleasant pastel green
     letter44.setText("Y")
-    letter44.setStyle("-fx-background-color: " + white1); // Pleasant pastel green
+    letter44.setStyle("-fx-background-color: " + white); // Pleasant pastel green
   }
 
   def setColor(label: Label, colorCode:String): Unit = {
@@ -150,7 +159,7 @@ class Controller {
   }
 
   def resetColor(label: Label): Unit = {
-    label.setStyle("-fx-background-color: " + white1)
+    label.setStyle("-fx-background-color: " + white)
   }
 
 
@@ -173,6 +182,7 @@ class Controller {
     startNewGameButton.setVisible(false)
     newBoardButton.setVisible(true)
     wordTextField.setVisible(true)
+    wordsFound = 0
     clearStuff()
   }
 
@@ -256,96 +266,70 @@ class Controller {
     println("North Click")
     val coords = Array[Coord2D]()
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.North, coords)
-    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
-    if(result._1) {
-      paintSquares(result._2, colors(wordsFound))
-      wordsFound+=1
-    }
-    clearStuff()
+    directionStuff(result)
   }
 
   def NorthWestClicked(): Unit = {
     println("NorthWest Click")
     val coords = Array[Coord2D]()
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthWest, coords)
-    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
-    if(result._1) {
-      paintSquares(result._2, colors(wordsFound))
-      wordsFound+=1
-    }
-    clearStuff()
+    directionStuff(result)
   }
 
   def NorthEastClicked(): Unit = {
     println("NorthEast Click")
     val coords = Array[Coord2D]()
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.NorthEast, coords)
-    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
-    if(result._1) {
-      paintSquares(result._2, colors(wordsFound))
-      wordsFound+=1
-    }
-    clearStuff()
+    directionStuff(result)
   }
 
   def SouthClicked(): Unit = {
     println("South Click")
     val coords = Array[Coord2D]()
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.South, coords)
-    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
-    if(result._1) {
-      paintSquares(result._2, colors(wordsFound))
-      wordsFound+=1
-    }
-    clearStuff()
+    directionStuff(result)
   }
 
   def SouthEastClicked(): Unit = {
     println("SouthEast Click")
     val coords = Array[Coord2D]()
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthEast, coords)
-    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
-    if(result._1) {
-      paintSquares(result._2, colors(wordsFound))
-      wordsFound+=1
-    }
-    clearStuff()
+    directionStuff(result)
   }
 
   def SouthWestClicked(): Unit = {
     println("SouthWest Click")
     val coords = Array[Coord2D]()
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.SouthWest, coords)
-    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
-    if(result._1) {
-      paintSquares(result._2, colors(wordsFound))
-      wordsFound+=1
-    }
-    clearStuff()
+    directionStuff(result)
   }
 
   def EastClicked(): Unit = {
     println("East Click")
     val coords = Array[Coord2D]()
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.East, coords)
-    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
-    if(result._1) {
-      paintSquares(result._2, colors(wordsFound))
-      wordsFound+=1
-    }
-    clearStuff()
+    directionStuff(result)
   }
 
   def WestClicked(): Unit = {
     println("West Click")
     val coords = Array[Coord2D]()
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.West, coords)
+    directionStuff(result)
+
+  }
+
+  def directionStuff(result: (Boolean, Array[Coord2D])): Unit = {
     println("Word found? " + result._1 + "\n Coords: " + result._2(0))
     if(result._1) {
       paintSquares(result._2, colors(wordsFound))
       wordsFound+=1
     }
     clearStuff()
+    if(wordsFound == maxWords) {
+      wordsFound = 0
+      lockEverything()
+    }
   }
 
   def paintSquares(coords: Array[Coord2D], colorCode: String): Unit = {
@@ -361,7 +345,7 @@ class Controller {
       case _ => {
         val nextCord = coords.head
         val square = labelMatrix(nextCord._1)(nextCord._2)
-        if(square.getStyle == ("-fx-background-color: " + white1)) {
+        if(square.getStyle == ("-fx-background-color: " + white)) {
           setColor(square, colorCode)
           paint(coords.tail, size - 1)
         } else {
@@ -390,6 +374,26 @@ class Controller {
     southEastButton.setVisible(false)
     southWestButton.setVisible(false)
     wordTextField.setText("")
+  }
+
+  def lockEverything(): Unit = {
+    wordTextField.setDisable(true)
+    checkWordButton.setDisable(true)
+    startNewGameButton.setDisable(true)
+  }
+
+  def unlockEverything(): Unit = {
+    wordTextField.setDisable(false)
+    checkWordButton.setDisable(false)
+    startNewGameButton.setDisable(false)
+  }
+
+  def closeWindow(): Unit = {
+    quit.getScene.getWindow.hide()
+  }
+
+  def setController(controller: SecondController): Unit = {
+    this.secondController = controller
   }
 
 }

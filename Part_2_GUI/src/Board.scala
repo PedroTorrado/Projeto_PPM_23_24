@@ -132,7 +132,7 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
           // Compute the next coordinate based on the current direction
           val nextCoord = computeNextCoord(startCoord, direction)
           // Check if the next coordinate is valid
-          if(isValidCoord(nextCoord)) {
+          if(isValidCoord(nextCoord) && !coords.contains(nextCoord)) {
             // Recur with the remaining word and the next coordinate in the current direction
             val playRec = play(remainingWord, nextCoord, direction, iCoords)
             savedCoords = playRec._2

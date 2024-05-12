@@ -8,9 +8,20 @@ class Main extends Application {
     primaryStage.setTitle("ZigZag")
     val fxmlLoader =
       new FXMLLoader(getClass.getResource("Controller.fxml"))
-    val mainViewRoot: Parent = fxmlLoader.load()
-    val scene = new Scene(mainViewRoot)
-    primaryStage.setScene(scene)
+    val mainViewRoot = fxmlLoader.load()
+    val controller = fxmlLoader.getController[Controller]
+
+    val fxmlLoader2 =
+      new FXMLLoader(getClass.getResource("SecondController.fxml"))
+    val root2 = fxmlLoader2.load()
+    val secondController = fxmlLoader2.getController[SecondController]
+    val secondStage: Stage = new Stage()
+
+    controller.setController(secondController)
+    secondController.setController(controller)
+
+    secondStage.setScene(new Scene(root2))
+    primaryStage.setScene(new Scene(mainViewRoot))
     primaryStage.show()
   }
 }   
