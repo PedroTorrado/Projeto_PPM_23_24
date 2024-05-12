@@ -6,13 +6,11 @@ import javafx.scene.{Parent, Scene}
 import javafx.scene.control.{Button, ChoiceBox, Label, TextField}
 import javafx.scene.layout.GridPane
 import javafx.scene.paint.Color
-import javafx.stage.Stage
+import javafx.stage.{Modality, Stage}
 
 import scala.annotation.tailrec
 
 class Controller {
-
-  private var secondController: SecondController = _
 
   @FXML private var gridPane: GridPane = _
 
@@ -37,6 +35,8 @@ class Controller {
 
   @FXML private var wordTextField: TextField = _
 
+  @FXML private var pontosLabel: Label = _
+  @FXML private var pontos: Label = _
   @FXML private var errorCoords: Label = _
   @FXML private var columnLabel: Label = _
   @FXML private var rowLabel: Label = _
@@ -182,11 +182,14 @@ class Controller {
     startNewGameButton.setVisible(false)
     newBoardButton.setVisible(true)
     wordTextField.setVisible(true)
+    pontos.setVisible(true)
+    pontos.setText("0")
+    pontosLabel.setVisible(true)
     wordsFound = 0
     clearStuff()
   }
 
-  private def createNewTestBoard(): BoardData = {
+  def createNewTestBoard(): BoardData = {
 
     // Create an empty board
     val board = BoardData.empty(5, 5)
@@ -316,19 +319,34 @@ class Controller {
     val coords = Array[Coord2D]()
     val result = filledBoard.play(selectedWord, selectedCoords, Direction.West, coords)
     directionStuff(result)
-
   }
 
   def directionStuff(result: (Boolean, Array[Coord2D])): Unit = {
-    println("Word found? " + result._1 + "\n Coords: " + result._2(0))
-    if(result._1) {
-      paintSquares(result._2, colors(wordsFound))
-      wordsFound+=1
-    }
-    clearStuff()
-    if(wordsFound == maxWords) {
-      wordsFound = 0
-      lockEverything()
+    if(filledBoard.checkWord(selectedWord)) {
+      println("Word found? " + result._1 + "\n Coords: " + result._2(0))
+      if (result._1) {
+        paintSquares(result._2, colors(wordsFound))
+        wordsFound += 1
+        pontos.setText((pontos.getText.toInt+1000).toString)
+      }
+      clearStuff()
+      if (wordsFound == maxWords) {
+        wordsFound = 0
+        val secondStage: Stage = new Stage()
+        secondStage.initModality(Modality.APPLICATION_MODAL)
+        secondStage.initOwner(gridPane.getScene().getWindow)
+        val fxmlLoader = new FXMLLoader(getClass.getResource("SecondController.fxml"))
+        val mainViewRoot: Parent = fxmlLoader.load()
+
+        val secondController = fxmlLoader.getController[SecondController]
+        secondController.setController(this)
+
+        val scene = new Scene(mainViewRoot)
+        secondStage.setScene(scene)
+        secondStage.show()
+      }
+    } else {
+      println("Word found? " + false)
     }
   }
 
@@ -376,24 +394,8 @@ class Controller {
     wordTextField.setText("")
   }
 
-  def lockEverything(): Unit = {
-    wordTextField.setDisable(true)
-    checkWordButton.setDisable(true)
-    startNewGameButton.setDisable(true)
-  }
-
-  def unlockEverything(): Unit = {
-    wordTextField.setDisable(false)
-    checkWordButton.setDisable(false)
-    startNewGameButton.setDisable(false)
-  }
-
   def closeWindow(): Unit = {
-    quit.getScene.getWindow.hide()
-  }
-
-  def setController(controller: SecondController): Unit = {
-    this.secondController = controller
+    gridPane.getScene.getWindow.hide()
   }
 
 }

@@ -69,5 +69,15 @@
       <Button fx:id="northWestButton" layoutX="618.0" layoutY="137.0" mnemonicParsing="false" onAction="#NorthWestClicked" prefHeight="25.0" prefWidth="50.0" rotate="-135.0" text="---&gt;" visible="false" wrapText="true" />
       <Button fx:id="southEastButton" layoutX="712.0" layoutY="227.0" mnemonicParsing="false" onAction="#SouthEastClicked" prefHeight="25.0" prefWidth="50.0" rotate="45.0" text="---&gt;" visible="false" wrapText="true" />
       <Button fx:id="southWestButton" layoutX="619.0" layoutY="226.0" mnemonicParsing="false" onAction="#SouthWestClicked" prefHeight="25.0" prefWidth="50.0" rotate="135.0" text="---&gt;" visible="false" wrapText="true" />
+      <Label fx:id="pontosLabel" layoutX="20.0" layoutY="14.0" text="Pontos: " visible="false">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <Label fx:id="pontos" layoutX="91.0" layoutY="14.0" prefHeight="30.0" prefWidth="71.0" text="0" visible="false">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="777.0" layoutY="21.0" text="Label" />
     </children>
 </Pane>

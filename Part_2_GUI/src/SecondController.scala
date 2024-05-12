@@ -1,7 +1,10 @@
-import javafx.fxml.FXML
+import javafx.fxml.{FXML, FXMLLoader}
+import javafx.scene.{Parent, Scene}
 import javafx.scene.control.Button
+import javafx.stage.Stage
 
 class SecondController {
+
 
   @FXML private var playAgain: Button = _
   @FXML private var quit: Button = _
@@ -13,11 +16,11 @@ class SecondController {
 
   def onPlayAgainClicked(): Unit = {
     playAgain.getScene.getWindow.hide()
-    controller.unlockEverything()
+    controller.createNewTestBoard()
   }
 
   def onQuitClicked(): Unit = {
-    playAgain.getScene.getWindow.hide()
+    quit.getScene.getWindow.hide()
     controller.closeWindow()
   }
 

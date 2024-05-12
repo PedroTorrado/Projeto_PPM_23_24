@@ -149,6 +149,23 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
     }
   }
 
+  def checkWord(word: String): Boolean = {
+    val fileSource = Source.fromFile("listWords.txt")
+    val lines = fileSource.getLines().toList
+    fileSource.close()
+    @tailrec
+    def checkWordOnFileLine(word: String, lines: List[String]): Boolean = {
+      if(lines.isEmpty)
+        return false
+      if(lines.head.contains(word)) {
+        true
+      } else {
+        checkWordOnFileLine(word, lines.tail)
+      }
+    }
+    checkWordOnFileLine(word, lines)
+  }
+
   def display(): Unit = {
     // Converter a lista de listas para uma matriz bidimensional
     val gridArray: Array[Array[Char]] = grid.map(_.toArray).toArray
@@ -206,7 +223,6 @@ case class BoardData(rows: Int, columns: Int, grid: List[List[Char]]) {
         (m.group(1).toInt, m.group(2).toInt): Coord2D
       }.toList
     }.toList
-
     setBoardWithWords(words, coords)
   }
 
