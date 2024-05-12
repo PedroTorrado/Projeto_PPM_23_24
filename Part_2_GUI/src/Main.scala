@@ -13,7 +13,7 @@ class Main extends Application {
     primaryStage.setScene(scene)
     primaryStage.show()
   }
-}   
+}
 
 object FxApp {
   def main(args: Array[String]): Unit = {
